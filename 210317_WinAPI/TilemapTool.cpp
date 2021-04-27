@@ -13,8 +13,8 @@ HRESULT TilemapTool::Init()
     SetClientRect(g_hWnd, TILEMAPTOOLSIZE_X, TILEMAPTOOLSIZE_Y);
 
     sampleTile = ImageManager::GetSingleton()->AddImage(
-        "基敲鸥老", "Image/maptiles.bmp", 640, 288,
-        SAMPLE_TILE_X, SAMPLE_TILE_Y);
+        "基敲鸥老", "Image/SamlpTile_1.bmp", SAMPLE_TILE_X*TILESIZE, SAMPLE_TILE_Y * TILESIZE ,
+        SAMPLE_TILE_X, SAMPLE_TILE_Y,true,RGB(255,0,255));
 
     hSelectedBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
 

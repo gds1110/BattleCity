@@ -3,12 +3,12 @@
 
 HRESULT PlayerShip::Init()
 {
-	image = ImageManager::GetSingleton()->AddImage("플레이어 우주선",
-		"Image/rocket.bmp", 52, 64, true, RGB(255, 0, 255));
+	image = ImageManager::GetSingleton()->AddImage("플레이어1탱크",
+		"Image/Player/Player.bmp", maxFrame.x*size, maxFrame.y * size, maxFrame.x, maxFrame.y, true, RGB(255, 0, 255));
 
 	if (image == nullptr)
 	{
-		MessageBox(g_hWnd, "플레이어 우주선 이미지 로드 실패", "초기화 실패", MB_OK);
+		MessageBox(g_hWnd, "플레이어1 탱크 이미지 로드 실패", "초기화 실패", MB_OK);
 		return E_FAIL;
 	}
 
@@ -66,8 +66,9 @@ void PlayerShip::Render(HDC hdc)
 {
 	if (image)
 	{
-		image->AlphaRender(hdc, pos.x, pos.y, true);
-		//image->Render(hdc, pos.x, pos.y, true);
+		/*image->AlphaRender(hdc, pos.x, pos.y, true);*/
+		image->FrameRender(hdc, pos.x, pos.y, frameX, frameY);
+		//image->Render(hdc, pos.x, pos.y);
 	}
 }
 

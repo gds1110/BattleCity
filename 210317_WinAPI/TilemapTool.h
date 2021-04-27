@@ -2,14 +2,13 @@
 #include "GameNode.h"
 
 // 샘플 타일 정보
-// 640 * 288
-#define SAMPLE_TILE_X	20
-#define SAMPLE_TILE_Y	9
+#define SAMPLE_TILE_X	11
+#define SAMPLE_TILE_Y	11
 #define TILESIZE		32
 
 // 메인 그리기 공간 정보
-#define	TILE_X			20
-#define	TILE_Y			20
+#define	TILE_X			26
+#define	TILE_Y			26
 
 typedef struct tagTile
 {
