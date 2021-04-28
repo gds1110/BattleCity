@@ -1,7 +1,10 @@
-﻿  MainGame.cpp
-C:\Users\KGA_12\Desktop\tank\BattleCity\210317_WinAPI\MainGame.cpp(66,79): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\KGA_12\Desktop\tank\BattleCity\210317_WinAPI\MainGame.cpp(69,50): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  TilemapTool.cpp
-C:\Users\KGA_12\Desktop\tank\BattleCity\210317_WinAPI\CommonFunction.h(13,15): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  210317_WinAPI.vcxproj -> C:\Users\KGA_12\Desktop\tank\BattleCity\x64\Debug\210317_WinAPI.exe
+﻿  BattleScene.cpp
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\CommonFunction.h(13,15): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(106,8): warning C4101: 'distance' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(110,10): warning C4101: 'r2' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(107,9): warning C4101: 'enemyPos' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(109,11): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(110,6): warning C4101: 'r1' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(109,8): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
+C:\Users\USER\Desktop\battlecity\BattleCity\210317_WinAPI\BattleScene.cpp(108,9): warning C4101: 'missilePos' :참조되지 않은 지역 변수입니다.
+  210317_WinAPI.vcxproj -> C:\Users\USER\Desktop\battlecity\BattleCity\x64\Debug\210317_WinAPI.exe

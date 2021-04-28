@@ -1,19 +1,22 @@
 #include "TilemapTool.h"
 #include "Image.h"
 #include "CommonFunction.h"
-
+#include "Button.h"
 /*
     과제 1. 선택한 샘플 타일을 샘플타일 밑에 출력 (3배 크기로)
     과제 2. 선택한 샘플 타일로 왼쪽 메인 공간에 선택된 좌표 이미지 변경
     과제 3. 드래그로 타일을 다중 선택 & 과제 2와 동일하게 이미지 변경
 */
 
+TILE_INFO TilemapTool::tileInfo[TILE_X * TILE_Y];
+int TilemapTool::gStageNum=1;
+
 HRESULT TilemapTool::Init()
 {
     SetClientRect(g_hWnd, TILEMAPTOOLSIZE_X, TILEMAPTOOLSIZE_Y);
-
+    
     sampleTile = ImageManager::GetSingleton()->AddImage(
-        "샘플타일", "Image/SamlpTile_1.bmp", SAMPLE_TILE_X*TILESIZE, SAMPLE_TILE_Y * TILESIZE ,
+        "샘플타일", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X*TILESIZE, SAMPLE_TILE_Y * TILESIZE ,
         SAMPLE_TILE_X, SAMPLE_TILE_Y,true,RGB(255,0,255));
 
     hSelectedBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
@@ -58,16 +61,73 @@ HRESULT TilemapTool::Init()
             //    sampleTileInfo[i * SAMPLE_TILE_X + j].rcTile.top + TILESIZE;
         }
     }
-
+    ImageManager::GetSingleton()->AddImage("저장버튼", "Image/Button_Save.bmp", 100, 100, 1, 2, false);
+    ImageManager::GetSingleton()->AddImage("로드버튼", "Image/Button_Load.bmp", 100, 100, 1, 2, false);
+    ImageManager::GetSingleton()->AddImage("맵더하기버튼", "Image/Button_PlusStage.bmp", 100, 100, 1, 2, false);
+    ImageManager::GetSingleton()->AddImage("맵빼기버튼", "Image/Button_MinusStage.bmp", 100, 100, 1, 2, false);
+    btnsave = new Button;
+    btnload = new Button;
+    btnplus = new Button;
+    btnminu = new Button;
+    btnsave->Init("저장버튼", TILEMAPTOOLSIZE_X-sampleTile->GetWidth(), TILEMAPTOOLSIZE_Y-200);
+    btnsave->SetFunc(Save);
+    btnload->Init("로드버튼", TILEMAPTOOLSIZE_X - sampleTile->GetWidth() + 120 , TILEMAPTOOLSIZE_Y - 200);
+    btnload->SetFunc(Load);
+    btnplus->Init("맵더하기버튼", TILEMAPTOOLSIZE_X - sampleTile->GetWidth()+240, TILEMAPTOOLSIZE_Y - 300);
+    btnplus->SetFunc(PlusStage);
+    btnminu->Init("맵빼기버튼", TILEMAPTOOLSIZE_X - sampleTile->GetWidth() + 240, TILEMAPTOOLSIZE_Y - 200);
+    btnminu->SetFunc(MinusStage);
+    
     return S_OK;
 }
 
 void TilemapTool::Release()
 {
+    SAFE_RELEASE(btnsave);
+    SAFE_RELEASE(btnload);
+    SAFE_RELEASE(btnplus);
+    SAFE_RELEASE(btnminu);
 }
 
 void TilemapTool::Update()
 {
+    if (btnsave)btnsave->Update();
+    if (btnload)btnload->Update();
+    if (btnplus)btnplus->Update();
+    if (btnminu)btnminu->Update();
+    //세이브로드
+   
+    if (KeyManager::GetSingleton()->IsStayKeyDown(VK_CONTROL))
+    {
+        if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F1))
+        {
+            Load();
+        }
+        else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F2))
+        {
+            Load();
+        }
+        else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F3))
+        {
+            Load();
+        }
+    }
+    else {
+        if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F1))
+        {
+            Save();
+        }
+        else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F2))
+        {
+            Save();
+        }
+        else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_F3))
+        {
+            Save();
+        }
+    }
+
+
     // 메인 영역 계산
     rcMain.left = 0;
     rcMain.top = 0;
@@ -172,6 +232,10 @@ void TilemapTool::Render(HDC hdc)
     Rectangle(hdc, ptSelected[0].x, ptSelected[0].y, ptSelected[1].x, ptSelected[1].y);
     SelectObject(hdc, hOldSelectedBrush);
 
+    if (btnsave)btnsave->Render(hdc);
+    if (btnload)btnload->Render(hdc);
+    if (btnplus)btnplus->Render(hdc); 
+    if (btnminu)btnminu->Render(hdc);
     // 메인영역 전체
     for (int i = 0; i < TILE_X * TILE_Y; i++)
     {
@@ -205,5 +269,50 @@ void TilemapTool::Render(HDC hdc)
             }
         }
     }
+    char szText[30]={};
+    wsprintf(szText, "stageNum: %d", gStageNum);
+    TextOut(hdc, 1460, 750, szText, strlen(szText));
+}
 
+void TilemapTool::Save(void)
+{
+    string fileName = "Save/saveMapData";
+     fileName += to_string(gStageNum) + ".map";
+    DWORD writtenBytes;
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    WriteFile(hFile, tileInfo,sizeof(TILE_INFO)*TILE_X* TILE_Y,&writtenBytes,NULL);
+    CloseHandle(hFile);
+}
+
+void TilemapTool::Load(void)
+{
+    string fileName = "Save/saveMapData";
+    fileName += to_string(gStageNum) + ".map";
+    DWORD readBytes;
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (ReadFile(hFile, tileInfo, sizeof(TILE_INFO) * TILE_X * TILE_Y, &readBytes, NULL))
+    {
+
+    }
+    else
+    {
+        MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
+    }
+    CloseHandle(hFile);
+}
+void TilemapTool::PlusStage(void)
+{
+    ++gStageNum;
+    if (gStageNum > 3) 
+    {
+        gStageNum = 1;
+    }
+}
+void TilemapTool::MinusStage(void)
+{
+    --gStageNum;
+    if (gStageNum <= 0)
+    {
+        gStageNum = 3;
+    }
 }

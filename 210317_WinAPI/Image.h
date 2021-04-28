@@ -101,5 +101,9 @@ public:
 
 	int GetWidth() { return this->imageInfo->width; }
 	int GetHeight() { return this->imageInfo->height; }
+	int GetFrameWidth() { return this->imageInfo->frameWidth; }
+	int GetFrameHeight() { return this->imageInfo->frameHeight; }
+
+	IMAGE_INFO* const GetImageInfo() {return this->imageInfo;}
 };
 

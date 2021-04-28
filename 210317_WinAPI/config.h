@@ -39,3 +39,16 @@ typedef struct tagFPoint
 extern HWND g_hWnd;
 extern HINSTANCE g_hInstance;
 extern POINT g_ptMouse;
+
+enum class TileType
+{
+	NORMAL,IRON,BUSH,RIVER,ICE,EAGLE,BLACK,NONE
+};
+
+typedef struct tagTile
+{
+	RECT rcTile;
+	int frameX;
+	int frameY;
+	TileType tileType;
+} TILE_INFO;

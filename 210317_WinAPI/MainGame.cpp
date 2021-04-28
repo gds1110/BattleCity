@@ -33,7 +33,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetSingleton()->AddScene("전투_1", new BattleScene());
 	SceneManager::GetSingleton()->AddScene("타일맵툴", new TilemapTool());
 
-	SceneManager::GetSingleton()->ChangeScene("타일맵툴");
+	SceneManager::GetSingleton()->ChangeScene("전투_1");
 
 	isInited = true;
 

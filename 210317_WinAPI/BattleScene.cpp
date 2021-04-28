@@ -4,23 +4,30 @@
 #include "EnemyManager.h"
 #include "Missile.h"
 #include "Image.h"
-#include "Iori.h"
 #include "PlayerShip.h"
-
+#include "CommonFunction.h"
 
 HRESULT BattleScene::Init()
 {
+	SetClientRect(g_hWnd, TILE_X * TILESIZE, TILESIZE * TILE_Y);
+
 	bin = new Image();
 	bin->Init("Image/backGround_01.bmp", WINSIZE_X, WINSIZE_Y);
 
-	tank = new Tank();
-	tank->Init();
+	/*tank = new Tank();
+	tank->Init();*/
 
-	enemyMgr = new EnemyManager();
-	enemyMgr->Init();
+	/*enemyMgr = new EnemyManager();
+	enemyMgr->Init();*/
 
 	playerShip = new PlayerShip();
 	playerShip->Init();
+	sampleTile = ImageManager::GetSingleton()->AddImage(
+		"샘플타일", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
+		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
+
+	StageLoad(1);
+
 
 	return S_OK;
 }
@@ -29,21 +36,16 @@ void BattleScene::Release()
 {
 	SAFE_RELEASE(playerShip);
 	SAFE_RELEASE(bin);
-	SAFE_RELEASE(tank);
 	SAFE_RELEASE(enemyMgr);
 }
 
 void BattleScene::Update()
 {
-	if (tank)
-	{
-		//tank->Update();
-	}
-
-	if (enemyMgr)
+	
+	/*if (enemyMgr)
 	{
 		enemyMgr->Update();
-	}
+	}*/
 
 	if (playerShip)
 	{
@@ -59,21 +61,43 @@ void BattleScene::Render(HDC hdc)
 	{
 		bin->Render(hdc/*, -100, 100*/);
 	}
+	
+	
 
-	if (tank)
-	{
-		tank->Render(hdc);
-	}
-
-	if (enemyMgr)
+	/*if (enemyMgr)
 	{
 		enemyMgr->Render(hdc);
-	}
+	}*/
 
 	if (playerShip)
 	{
 		playerShip->Render(hdc);
 	}
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		sampleTile->FrameRender(hdc,
+			TileInfo[i].rcTile.left,
+			TileInfo[i].rcTile.top,
+			TileInfo[i].frameX,
+			TileInfo[i].frameY);
+	}
+}
+
+void BattleScene::StageLoad(int stageNum)
+{
+	string fileName = "Save/saveMapData";
+	fileName += to_string(stageNum) + ".map";
+	DWORD readBytes;
+	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (ReadFile(hFile, TileInfo, sizeof(TILE_INFO) * TILE_X * TILE_Y, &readBytes, NULL))
+	{
+
+	}
+	else
+	{
+		MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
+	}
+	CloseHandle(hFile);
 }
 
 void BattleScene::CheckCollision()
@@ -84,7 +108,7 @@ void BattleScene::CheckCollision()
 	FPOINT missilePos;
 	float x, y;
 	int r1, r2;
-	Missile* missileArray = tank->GetMissile();
+	//Missile* missileArray = tank->GetMissile();
 
 	//for (int i = 0; i < enemyCount; i++)
 	//{
