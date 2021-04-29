@@ -6,6 +6,7 @@ class BattleUi : public GameNode
 private:
 	Image* uiSpace;
 	Image* numImage;
+	Image* enemyIcon;
 
 public:
 	virtual HRESULT Init();

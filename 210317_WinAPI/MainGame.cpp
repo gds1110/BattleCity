@@ -37,7 +37,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetSingleton()->AddScene("타이틀씬", new TitleScene());
 	SceneManager::GetSingleton()->AddScene("스코어", new ScoreScene());
 
-	SceneManager::GetSingleton()->ChangeScene("타이틀씬");
+	SceneManager::GetSingleton()->ChangeScene("스코어");
 
 	isInited = true;
 
