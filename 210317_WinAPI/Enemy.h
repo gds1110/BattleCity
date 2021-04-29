@@ -31,9 +31,9 @@ private:
 	int state;
 
 public:
-	HRESULT Init(int posX = 0, int posY = 0);		
-	void Release();		
-	void Update();		
+	HRESULT Init(int posX = 0, int posY = 0);
+	void Release();
+	void Update();
 	void Render(HDC hdc);
 
 	void Move();
@@ -47,6 +47,6 @@ public:
 	inline int GetSize() { return this->size; }
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
-
+	inline void SetIsGenEffect(bool isGenEffect) { this->isGenEffect = isGenEffect; }
 };
 

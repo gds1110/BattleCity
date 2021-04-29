@@ -29,7 +29,7 @@ HRESULT Enemy::Init(int posX, int posY)
     // 이펙트
     updateCount = 0;
     genEffectCurrFrameX = 0;
-    isGenEffect = true;
+    isGenEffect = false;
 
     // 기본 정보
     pos.x =  posX;
