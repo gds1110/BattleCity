@@ -16,7 +16,6 @@ public:
 	static GameNode* currentScene;
 	static GameNode* loadingScene;
 	static GameNode* readyScene;
-
 public:
 	HRESULT Init();
 	void Release();

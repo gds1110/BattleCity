@@ -1,24 +1,15 @@
 #pragma once
 #include "GameNode.h"
-// 샘플 타일 정보
-#define SAMPLE_TILE_X	11
-#define SAMPLE_TILE_Y	14
-#define TILESIZE		32
-
-
-// 메인 그리기 공간 정보
-#define	TILE_X			26
-#define	TILE_Y			26
 
 
 
 
 // 기존 MainGame 클래스의 내용을 이동
 class PlayerShip;
-
 class EnemyManager;
 class Image;
 class TilemapTool;
+class BattleUi;
 class BattleScene : public GameNode
 {
 private:
@@ -27,9 +18,11 @@ private:
 	RECT rcMain;
 	Image* sampleTile;
 	Image* bin;
+	Image* uiSpace;
+	Image* numImage;
 	EnemyManager* enemyMgr;
 	PlayerShip* playerShip;
-
+	BattleUi* battleUi;
 public:
 	virtual HRESULT Init();
 	virtual void Release();

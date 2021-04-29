@@ -52,3 +52,15 @@ typedef struct tagTile
 	int frameY;
 	TileType tileType;
 } TILE_INFO;
+
+// 샘플 타일 정보
+#define SAMPLE_TILE_X	11
+#define SAMPLE_TILE_Y	14
+#define TILESIZE		32
+
+
+// 메인 그리기 공간 정보
+#define	TILE_X			26
+#define	TILE_Y			26
+
+#define UISPACE_X		150
