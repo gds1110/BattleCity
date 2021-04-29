@@ -25,7 +25,7 @@ HRESULT Tank::Init()
 		missile[i].Init();
 	}
 
-	//for (int i = 0; i < missileCount; i++)
+	//for (int i = 0; i < missileCount; i++)s
 	//{
 	//	missile[i] = new Missile();
 	//	missile[i]->Init();

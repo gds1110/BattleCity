@@ -3,10 +3,12 @@
 #include "Tank.h"
 #include "Image.h"
 #include "MissileManager.h"
+#include "Missile.h"
 
 HRESULT Enemy::Init(int posX, int posY)
 {
-    image = ImageManager::GetSingleton()->FindImage("Enemy");
+    // 이미지
+    image = ImageManager::GetSingleton()->AddImage("Enemy", "Image/Enemy/Enemy.bmp", 512, 384, 8, 6, true, RGB(255, 0, 255));
     if (image == nullptr)
     {
         MessageBox(g_hWnd, 
@@ -14,67 +16,64 @@ HRESULT Enemy::Init(int posX, int posY)
         return E_FAIL;
     }
 
-    currFrameX = 0;
-    updateCount = 0;
+    regenEffectImg = ImageManager::GetSingleton()->AddImage("RegenEffect", "Image/Effect/Spawn_Effect.bmp",
+        64 * 4, 16 * 4, 4, 1, true, RGB(255, 0, 255));
+    if (regenEffectImg == nullptr)
+    {
+        MessageBox(g_hWnd,
+            "effect에 해당하는 이미지가 추가되지 않았음!", "경고", MB_OK);
+        return E_FAIL;
+    }
+    currFrameX = 5;
 
+    // 이펙트
+    updateCount = 0;
+    genEffectCurrFrameX = 0;
+    isGenEffect = true;
+
+    // 기본 정보
     pos.x =  posX;
     pos.y = posY;
     size = 80;
-    name = "NormalEnemy";
-    shape = { 0, 0, 0, 0 };
-    moveSpeed = 3.3f;
+    hitRc = { 0, 0, 0, 0 };
+    moveSpeed = 100.0f;
     isAlive = true;
-    angle = 0.0f;
-    target = nullptr;
-    dir = 1;
 
-    // 미사일 매니저
-    missileMgr = new MissileManager();
-    missileMgr->Init(this);
+    // 움직임
+    state = 1;
 
-    fireCount = 0;
+    // 미사일
+    missile = new Missile();
+    missile->Init();
+    dir = -90;
 
     return S_OK;
 }
 
 void Enemy::Release()
 {
-    SAFE_RELEASE(missileMgr);
+    SAFE_RELEASE(missile);
 }
 
 void Enemy::Update()
 {
     if (isAlive)
     {
-        //HorizonMove();
-        //Move();
-
-        // 미사일 발사
-        if (missileMgr)
+        if (isGenEffect)
         {
-            // 함수 호출 주기를 바꿔보자.
-            fireCount++;
-            if (fireCount % 20 == 0)
-            {
-                fireCount = 0;
-                missileMgr->Fire();
-            }
-            missileMgr->Update();
+            EffectFrame();
         }
-
-        // 애니메이션 프레임
-        updateCount++;
-        if (updateCount == 5)
+        else
         {
-            currFrameX++;
-            if (currFrameX >= 10)
+            Move();
+
+            // 미사일 발사
+            if (missile)
             {
-                currFrameX = 0;
+                IsFired();
+                missile->Update();
             }
-
-            updateCount = 0;
         }
-
     }
 }
 
@@ -82,42 +81,84 @@ void Enemy::Render(HDC hdc)
 {
     if (isAlive)
     {
-        RenderEllipseToCenter(hdc, pos.x, pos.y, size, size);
-
-        if (image)
+        //RenderEllipseToCenter(hdc, pos.x, pos.y, size, size);
+        if (isGenEffect)
         {
-            image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
+            if (regenEffectImg)
+            {
+                regenEffectImg->FrameRender(hdc, pos.x, pos.y, genEffectCurrFrameX, 0, true);
+            }
         }
-
-        if (missileMgr)
+        else
         {
-            missileMgr->Render(hdc);
+            if (image)
+            {
+                image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
+            }
+
+            if (missile)
+            {
+                missile->Render(hdc);
+            }
         }
     }
 }
 
 void Enemy::Move()
 {
-    if (target)
+    float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
+    switch (state)
     {
-        FPOINT targetPos = target->GetPos();
-
-        // 현재 위치에서 타겟 위치로 이동할 수 있는 각도 구하기
-        float x = targetPos.x - pos.x;
-        float y = targetPos.y - pos.y;
-
-        angle = atan2(y, x);
-
-        pos.x += cosf(angle) * moveSpeed;
-        pos.y += sinf(angle) * moveSpeed;
+    case UP:
+        currFrameX = 1;
+        pos.y -= moveSpeed * elapsedTime;
+        dir = 90;
+        break;
+    case DOWN:
+        currFrameX = 5;
+        pos.y += moveSpeed * elapsedTime;
+        dir = -90;
+        break;
+    case LEFT:
+        currFrameX = 3;
+        pos.x -= moveSpeed * elapsedTime;
+        break;
+    case RIGHT:
+        currFrameX = 7;
+        pos.x += moveSpeed * elapsedTime;
+        break;
     }
 }
 
-void Enemy::HorizonMove()
+void Enemy::Dead()
 {
-    if (pos.x > WINSIZE_X || pos.x < 0)
-    {
-        dir *= -1;
-    }
-    pos.x += moveSpeed * dir;
+    isAlive = false;
 }
+
+void Enemy::IsFired()
+{
+    if (missile->GetIsFired() == false)
+    {
+        missile->SetIsFired(true);
+        missile->SetAngle(DegToRad(dir));
+        missile->SetPos(pos);
+    }
+}
+
+void Enemy::EffectFrame()
+{
+    updateCount++;
+    if (updateCount == 100)
+    {
+        genEffectCurrFrameX++;
+        if (genEffectCurrFrameX >= 4)
+        {
+            isGenEffect = false;
+            genEffectCurrFrameX = 0;
+        }
+        updateCount = 0;
+    }
+
+}
+
+
