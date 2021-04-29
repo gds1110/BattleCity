@@ -6,13 +6,14 @@
 #include "Image.h"
 #include "PlayerShip.h"
 #include "CommonFunction.h"
+#include "BattleUi.h"
 
 HRESULT BattleScene::Init()
 {
-	SetClientRect(g_hWnd, TILE_X * TILESIZE, TILESIZE * TILE_Y);
+	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
 
 	bin = new Image();
-	bin->Init("Image/backGround_01.bmp", WINSIZE_X, WINSIZE_Y);
+	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);
 
 	// 利 积己
 	enemyMgr = new EnemyManager();
@@ -25,6 +26,9 @@ HRESULT BattleScene::Init()
 		"基敲鸥老", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
 
+	battleUi = new BattleUi();
+	battleUi->Init();
+
 	StageLoad(1);
 
 
@@ -33,6 +37,7 @@ HRESULT BattleScene::Init()
 
 void BattleScene::Release()
 {
+	SAFE_RELEASE(battleUi);
 	SAFE_RELEASE(playerShip);
 	SAFE_RELEASE(bin);
 	SAFE_RELEASE(enemyMgr);
@@ -46,9 +51,15 @@ void BattleScene::Update()
 		enemyMgr->Update();
 	}
 
+
 	if (playerShip)
 	{
 		playerShip->Update();
+	}
+
+	if (battleUi)
+	{
+		battleUi->Update();
 	}
 
 	CheckCollision();
@@ -59,6 +70,11 @@ void BattleScene::Render(HDC hdc)
 	if (bin)
 	{
 		bin->Render(hdc);
+	}
+	
+	if (uiSpace)
+	{
+		uiSpace->Render(hdc, TILE_X * TILESIZE, 0);
 	}
 	
 	
@@ -82,6 +98,12 @@ void BattleScene::Render(HDC hdc)
 			TileInfo[i].frameX,
 			TileInfo[i].frameY);
 	}
+
+	if (battleUi)
+	{
+		battleUi->Render(hdc);
+	}
+
 }
 
 void BattleScene::StageLoad(int stageNum)
