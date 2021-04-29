@@ -18,7 +18,6 @@ HRESULT BattleUi::Init()
 
 void BattleUi::Release()
 {
-	SAFE_RELEASE(uiSpace);
 
 }
 
