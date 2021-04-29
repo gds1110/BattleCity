@@ -38,6 +38,9 @@ private:
 	int stateFrameY = 0;
 	int frameX = 0;
 	int frameY = 0;
+	float	summonTimer;
+	float	totalSummonTimer;
+	int		summonFrame;
 	POINT maxFrame = { 8,4 };
 	
 	//¼±¾ð
