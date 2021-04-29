@@ -19,6 +19,8 @@ HRESULT EnemyManager::Init()
     ememyRegenCount = 0;
     posIndex = 0;
     regenTimer = 0.0f;
+    iIndex = 0;
+    regenEnemy = true;
     return S_OK;
 }
 
@@ -36,6 +38,7 @@ void EnemyManager::Release()
 void EnemyManager::Update()
 {
     RegenEnemy();
+
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
@@ -54,8 +57,33 @@ void EnemyManager::Render(HDC hdc)
 
 void EnemyManager::RegenEnemy()
 {
-    //regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
-    for (int i = 0; i < enemyCount; i++)
+    if (ememyRegenCount >= 4)
+    {
+        regenEnemy = false;
+    }
+    else if (ememyRegenCount <= 3)
+    {
+        regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
+        if (regenTimer >= 3.0f)
+        {
+            vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
+            vEnemys[iIndex]->SetIsGenEffect(true);
+            ememyRegenCount++;
+            posIndex++;
+            iIndex++;
+            regenTimer = 0.0f;
+            if (posIndex > 2)
+            {
+                posIndex = 0;
+            }
+        }
+    }
+
+    if (iIndex < enemyCount)
+    {
+        regenEnemy = false;
+    }
+   /* for (int i = 0; i < enemyCount; i++)
     {
         regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
         if (ememyRegenCount >= 4)
@@ -78,5 +106,5 @@ void EnemyManager::RegenEnemy()
                 regenTimer = 0.0f;
             }
         }       
-    }
+    }*/
 }

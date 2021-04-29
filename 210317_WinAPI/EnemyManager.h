@@ -12,6 +12,8 @@ private:
 	int enemyCount;
 	int ememyRegenCount;
 	float regenTimer;
+	int iIndex;
+	bool regenEnemy;
 
 public:
 	HRESULT Init();
