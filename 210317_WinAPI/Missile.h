@@ -31,7 +31,7 @@ private:
 	Enemy* owner;
 
 public:
-	HRESULT Init(Enemy* owner);
+	HRESULT Init();
 	void Release();		
 	void Update();		
 	void Render(HDC hdc);

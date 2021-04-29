@@ -1,4 +1,9 @@
-﻿  MainGame.cpp
-C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\MainGame.cpp(66,79): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\MainGame.cpp(69,50): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Enemy.cpp
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\CommonFunction.h(13,15): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(25,14): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(26,13): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(110,60): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(110,53): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(117,51): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\210317_WinAPI\Enemy.cpp(117,44): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   210317_WinAPI.vcxproj -> C:\Users\dudck\OneDrive\바탕 화면\4K_ShootingGame\BattleCity\x64\Debug\210317_WinAPI.exe

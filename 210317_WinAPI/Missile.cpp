@@ -3,7 +3,7 @@
 #include "CommonFunction.h"
 #include "Image.h"
 
-HRESULT Missile::Init(Enemy* owner)
+HRESULT Missile::Init()
 {
 	this->owner = owner;
 
@@ -58,7 +58,7 @@ void Missile::Update()
 		if (pos.x < 0 || pos.y < 0 || pos.x > WINSIZE_X || pos.y > WINSIZE_Y)
 		{
 			isFired = false;
-			fireStep = 0;
+
 		}
 	}
 
@@ -80,8 +80,8 @@ void Missile::Render(HDC hdc)
 void Missile::MovingNormal()
 {
 	float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
-	pos.x += cosf(angle) * moveSpeed * elapsedTime / moveTime;
-	pos.y -= sinf(angle) * moveSpeed * elapsedTime / moveTime;
+	pos.x += cosf(angle) * moveSpeed * elapsedTime;
+	pos.y -= sinf(angle) * moveSpeed * elapsedTime;
 }
 
 void Missile::MovingSkill_01()
@@ -120,6 +120,6 @@ void Missile::MovingFollowTarget()
 void Missile::SetIsFired(bool isFired)
 {
 	this->isFired = isFired;
-	pos.x = owner->GetPos().x;
-	pos.y = owner->GetPos().y;
+	//pos.x = owner->GetPos().x;
+	//pos.y = owner->GetPos().y;
 }

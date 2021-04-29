@@ -12,9 +12,9 @@ HRESULT MainGame::Init()
 	SceneManager::GetSingleton()->Init();
 
 	// 이미지를 미리 로드한다
-	ImageManager::GetSingleton()->AddImage("Enemy",
+	/*ImageManager::GetSingleton()->AddImage("Enemy",
 		"Image/ufo.bmp", 530, 32, 10, 1,
-		true, RGB(255, 0, 255));
+		true, RGB(255, 0, 255));*/
 
 	ImageManager::GetSingleton()->AddImage("EnemyMissile",
 		"Image/구슬.bmp", 20, 20, true, RGB(255, 0, 255));

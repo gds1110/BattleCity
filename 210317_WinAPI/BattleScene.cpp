@@ -14,14 +14,13 @@ HRESULT BattleScene::Init()
 	bin = new Image();
 	bin->Init("Image/backGround_01.bmp", WINSIZE_X, WINSIZE_Y);
 
-	/*tank = new Tank();
-	tank->Init();*/
-
-	/*enemyMgr = new EnemyManager();
-	enemyMgr->Init();*/
+	// 利 积己
+	enemyMgr = new EnemyManager();
+	enemyMgr->Init();
 
 	playerShip = new PlayerShip();
 	playerShip->Init();
+
 	sampleTile = ImageManager::GetSingleton()->AddImage(
 		"基敲鸥老", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
@@ -42,10 +41,10 @@ void BattleScene::Release()
 void BattleScene::Update()
 {
 	
-	/*if (enemyMgr)
+	if (enemyMgr)
 	{
 		enemyMgr->Update();
-	}*/
+	}
 
 	if (playerShip)
 	{
@@ -59,20 +58,22 @@ void BattleScene::Render(HDC hdc)
 {
 	if (bin)
 	{
-		bin->Render(hdc/*, -100, 100*/);
+		bin->Render(hdc);
 	}
 	
 	
 
-	/*if (enemyMgr)
+	if (enemyMgr)
 	{
 		enemyMgr->Render(hdc);
-	}*/
+	}
 
 	if (playerShip)
 	{
 		playerShip->Render(hdc);
 	}
+
+	// 甘 弊府扁
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		sampleTile->FrameRender(hdc,
