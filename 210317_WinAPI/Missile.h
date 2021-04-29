@@ -42,7 +42,7 @@ private:
 
 
 public:
-	HRESULT Init(void);
+	HRESULT Init();
 	void Release();		
 	void Update();		
 	void Render(HDC hdc);

@@ -3,50 +3,31 @@
 
 HRESULT EnemyManager::Init()
 {
-    // 1) 배열
-    //Enemy* enemys = new Enemy[10];
-    //for (int i = 0; i < 10; i++)
-    //{
-    //    enemys[i].Init();
-    //}
-
-    // TODO : emplace_back() 성능 차이
-    // 2) vector push_back()
-    //for (int i = 0; i < 10; i++)
-    //{
-    //    vEnemys.push_back(new Enemy());
-    //    vEnemys[i]->Init();
-    //}
-
-    // 3) vector resize()
-    vEnemys.resize(10);
-    for (int i = 0; i < 10; i++)
+    enemyCount = 20;
+    // 적 생성 20마리
+    vEnemys.resize(enemyCount);
+    for (int i = 0; i < enemyCount; i++)
     {
-        //vEnemys.push_back(new Enemy());
         vEnemys[i] = new Enemy();
-        vEnemys[i]->Init(150 + (i % 5) * 200, 100 + (i / 5) * 500);
+        vEnemys[i]->Init(-100, -100);
     }
 
+    vEnemyGenPos.push_back({ 50, 50 });
+    vEnemyGenPos.push_back({ 32 * 26 / 2, 50 });
+    vEnemyGenPos.push_back({ 32 * 26 - 50, 50 });
 
-    //// 4) vector reserve()
-    //vEnemys.reserve(10);
-    //for (int i = 0; i < 10; i++)
-    //{
-    //    vEnemys.push_back(new Enemy());
-    //    vEnemys[i]->Init();
-    //}
-
-
+    ememyRegenCount = 0;
+    posIndex = 0;
+    regenTimer = 0.0f;
     return S_OK;
 }
 
 void EnemyManager::Release()
 {
-    // 반복자(iterator) : STL 자료구조를 구성하는 원소의 메모리를 저장하는 객체
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
-        (*it)->Release();   // (*it) -> Enemy* 데이터타입확인
+        (*it)->Release(); 
         delete (*it);
         (*it) = nullptr;
     }
@@ -54,6 +35,7 @@ void EnemyManager::Release()
 
 void EnemyManager::Update()
 {
+    RegenEnemy();
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
@@ -70,11 +52,31 @@ void EnemyManager::Render(HDC hdc)
     }
 }
 
-void EnemyManager::AddEnemy(int size)
+void EnemyManager::RegenEnemy()
 {
-    for (int i = 0; i < size; i++)
+    //regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    for (int i = 0; i < enemyCount; i++)
     {
-        vEnemys.push_back(new Enemy());
-        vEnemys[vEnemys.size() - 1]->Init();
+        regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
+        if (ememyRegenCount >= 4)
+        {
+            break;
+        }
+
+        else
+        {
+            if (regenTimer >= 20.0f)
+            {
+                vEnemys[i]->SetPos(vEnemyGenPos[posIndex]);
+
+                ememyRegenCount++;
+                posIndex++;
+                if (posIndex > 2)
+                {
+                    posIndex = 0;
+                }
+                regenTimer = 0.0f;
+            }
+        }       
     }
 }

@@ -6,7 +6,7 @@
 #define EXPLOSION_MAX_FRAME 3
 #define EXPLOSION_MAX_TIME 0.1
 
-HRESULT Missile::Init(void)
+HRESULT Missile::Init()
 {
 	
 	ImageManager::GetSingleton()->AddImage("MissileLeft",
@@ -98,7 +98,7 @@ void Missile::Update()
 				explosionPos = { (long)pos.x,(long)pos.y };
 			}
 			isFired = false;
-			fireStep = 0;
+
 		}
 	}
 	if (((angle >= -PI / 4) && (angle < PI / 4))|| ((angle >= PI * 3 / 4) || (angle < -PI * 3 / 4)))
@@ -165,8 +165,8 @@ void Missile::Render(HDC hdc)
 void Missile::MovingNormal()
 {
 	float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
-	pos.x += cosf(angle) * moveSpeed * elapsedTime / moveTime;
-	pos.y -= sinf(angle) * moveSpeed * elapsedTime / moveTime;
+	pos.x += cosf(angle) * moveSpeed * elapsedTime;
+	pos.y -= sinf(angle) * moveSpeed * elapsedTime;
 }
 
 void Missile::MovingSkill_01()
