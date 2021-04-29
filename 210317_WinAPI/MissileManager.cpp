@@ -10,7 +10,7 @@ HRESULT MissileManager::Init(Enemy* owner)
     for (it = vMissiles.begin(); it != vMissiles.end(); it++)
     {
         (*it) = new Missile();
-        (*it)->Init(this->owner);
+        (*it)->Init();
 
         // 미사일 매니저를 들고 있는 적 객체의 정보를 전달
     }

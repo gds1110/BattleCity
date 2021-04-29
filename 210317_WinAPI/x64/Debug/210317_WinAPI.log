@@ -1,4 +1,0 @@
-﻿  MainGame.cpp
-C:\Users\nickname\Desktop\tank\BattleCity\210317_WinAPI\MainGame.cpp(66,79): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\nickname\Desktop\tank\BattleCity\210317_WinAPI\MainGame.cpp(69,50): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  210317_WinAPI.vcxproj -> C:\Users\nickname\Desktop\tank\BattleCity\x64\Debug\210317_WinAPI.exe
