@@ -37,10 +37,38 @@ HRESULT TilemapTool::Init()
                 tileInfo[i * TILE_X + j].rcTile.top + TILESIZE;
         }
     }
-
+    TileType typeIndex;
     // 샘플 공간 렉트 설정
     for (int i = 0; i < SAMPLE_TILE_Y; i++)
     {
+        if (i <= 1)
+        {
+            typeIndex = TileType::NORMAL;
+        }
+        else if (i <= 3)
+        {
+            typeIndex = TileType::IRON;
+        }
+        else if (i <= 5)
+        {
+            typeIndex = TileType::BUSH;
+        }
+        else if (i <= 7)
+        {
+            typeIndex = TileType::RIVER;
+        }
+        else if (i <= 9)
+        {
+            typeIndex = TileType::ICE;
+        }
+        else if (i <= 11)
+        {
+            typeIndex = TileType::EAGLE;
+        }
+        else if (i <= 13)
+        {
+            typeIndex = TileType::BLACK;
+        }
         for (int j = 0; j < SAMPLE_TILE_X; j++)
         {
             SetRect(&sampleTileInfo[i * SAMPLE_TILE_X + j].rcTile,
@@ -51,7 +79,7 @@ HRESULT TilemapTool::Init()
 
             sampleTileInfo[i * SAMPLE_TILE_X + j].frameX = j;
             sampleTileInfo[i * SAMPLE_TILE_X + j].frameY = i;
-
+            sampleTileInfo[i * SAMPLE_TILE_X + j].tileType = typeIndex;
             //sampleTileInfo[i * SAMPLE_TILE_X + j].rcTile.left =
             //    TILEMAPTOOLSIZE_X - sampleTile->GetWidth() + (TILESIZE * j);
             //sampleTileInfo[i * SAMPLE_TILE_X + j].rcTile.top = (TILESIZE * i);
@@ -165,6 +193,7 @@ void TilemapTool::Update()
 
                             tileInfo[i + j * TILE_X + k].frameX = ptStartSelectedFrame.x + k;
                             tileInfo[i + j * TILE_X + k].frameY = ptStartSelectedFrame.y + j;
+                            tileInfo[i + j * TILE_X + k].tileType = sampleTileInfo[(ptStartSelectedFrame.y+j) * SAMPLE_TILE_X + ptStartSelectedFrame.x+k].tileType;
                         }
                     }
 
