@@ -26,6 +26,7 @@ private:
 	int updateCount;
 	int genEffectCurrFrameX;
 	bool isGenEffect;
+	int effectCount;
 
 	// 움직임 관련 변수
 	int state;
@@ -37,6 +38,7 @@ public:
 	void Render(HDC hdc);
 
 	void Move();
+	void Direction();
 	void Dead();
 	void IsFired();
 	void EffectFrame();
@@ -48,5 +50,6 @@ public:
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
 	inline void SetIsGenEffect(bool isGenEffect) { this->isGenEffect = isGenEffect; }
+	inline RECT getHitRc() { return this->hitRc; }
 };
 

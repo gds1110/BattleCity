@@ -30,6 +30,7 @@ HRESULT Enemy::Init(int posX, int posY)
     updateCount = 0;
     genEffectCurrFrameX = 0;
     isGenEffect = false;
+    effectCount = 0;
 
     // 기본 정보
     pos.x =  posX;
@@ -59,13 +60,12 @@ void Enemy::Update()
 {
     if (isAlive)
     {
-        if (isGenEffect)
-        {
-            EffectFrame();
-        }
+        if (isGenEffect)    EffectFrame();
+
         else
         {
             Move();
+            Direction();
 
             // 미사일 발사
             if (missile)
@@ -84,22 +84,13 @@ void Enemy::Render(HDC hdc)
         //RenderEllipseToCenter(hdc, pos.x, pos.y, size, size);
         if (isGenEffect)
         {
-            if (regenEffectImg)
-            {
-                regenEffectImg->FrameRender(hdc, pos.x, pos.y, genEffectCurrFrameX, 0, true);
-            }
+            if (regenEffectImg)    regenEffectImg->FrameRender(hdc, pos.x, pos.y, genEffectCurrFrameX, 0, true);
         }
         else
         {
-            if (image)
-            {
-                image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
-            }
+            if (image)  image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
 
-            if (missile)
-            {
-                missile->Render(hdc);
-            }
+            if (missile)    missile->Render(hdc);
         }
     }
 }
@@ -122,12 +113,49 @@ void Enemy::Move()
     case LEFT:
         currFrameX = 3;
         pos.x -= moveSpeed * elapsedTime;
+        dir = 180;
         break;
     case RIGHT:
         currFrameX = 7;
         pos.x += moveSpeed * elapsedTime;
+        dir = 0;
         break;
     }
+}
+
+void Enemy::Direction()
+{
+    srand(time(NULL));
+    switch (state)
+    {
+    case UP:
+        if (pos.y <= 0 /*&&*/)
+        {
+            state = rand() % 2 + 2;
+        }
+        break;
+    case DOWN:
+        if (pos.y >= TILESIZE * TILE_Y /*&&*/)
+        {
+            state = rand() % 2 + 2;
+        }
+        break;
+    case LEFT:
+        if (pos.x <= 0 /*&&*/)
+        {
+            state = rand() % 2;
+        }
+        break;
+    case RIGHT:
+        if (pos.x >= TILE_X * TILESIZE + UISPACE_X /*&&*/)
+        {
+            state = rand() % 2;
+        }
+        break;
+    }
+
+
+
 }
 
 void Enemy::Dead()
@@ -148,13 +176,15 @@ void Enemy::IsFired()
 void Enemy::EffectFrame()
 {
     updateCount++;
-    if (updateCount == 100)
+    if (updateCount == 20)
     {
         genEffectCurrFrameX++;
         if (genEffectCurrFrameX >= 4)
         {
-            isGenEffect = false;
+            effectCount++;
             genEffectCurrFrameX = 0;
+            if (effectCount >= 4)   isGenEffect = false;
+
         }
         updateCount = 0;
     }
