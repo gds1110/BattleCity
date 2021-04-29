@@ -65,7 +65,7 @@ void EnemyManager::RegenEnemy()
 
         else
         {
-            if (regenTimer >= 5.0f)
+            if (regenTimer >= 20.0f)
             {
                 vEnemys[i]->SetPos(vEnemyGenPos[posIndex]);
 
