@@ -10,21 +10,21 @@ HRESULT Missile::Init()
 {
 	
 	ImageManager::GetSingleton()->AddImage("MissileLeft",
-		"Image/Bullet/Missile_Left.bmp", 4, 3, true, RGB(255, 0, 255));
+		"Image/Bullet/Missile_Left.bmp", 12, 9, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("MissileRight",
-		"Image/Bullet/Missile_Right.bmp", 4, 3, true, RGB(255, 0, 255));
+		"Image/Bullet/Missile_Right.bmp", 12, 9, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("MissileUp",
-		"Image/Bullet/Missile_Up.bmp", 3, 4, true, RGB(255, 0, 255));
+		"Image/Bullet/Missile_Up.bmp", 9, 12, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("MissileDown",
-		"Image/Bullet/Missile_Down.bmp", 3, 4, true, RGB(255, 0, 255));
+		"Image/Bullet/Missile_Down.bmp", 9, 12, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("MissileExplosion",
 		"Image/Effect/Boom_Effect.bmp", 64 * EXPLOSION_MAX_FRAME, 64, EXPLOSION_MAX_FRAME, 1, true, RGB(255, 0, 255));
 
 	pos = {-100, -100};
 	moveSpeed = 3000.0f;
 	moveTime = 10.0f;
-	sizeX = 3;
-	sizeY = 4;
+	sizeX = 9;
+	sizeY = 12;
 	shape = { 0, 0, 0, 0 };
 	damage = 5000;
 	angle = 0.0f;
@@ -103,13 +103,13 @@ void Missile::Update()
 	}
 	if (((angle >= -PI / 4) && (angle < PI / 4))|| ((angle >= PI * 3 / 4) || (angle < -PI * 3 / 4)))
 	{
-		sizeX = 4;
-		sizeY = 3;
+		sizeX = 12;
+		sizeY = 9;
 	}
 	if (((angle >= PI / 4) && (angle < PI * 3 / 4))|| ((angle < -PI / 4) && (angle >= -PI * 3 / 4)))
 	{
-		sizeX = 3;
-		sizeY = 4;
+		sizeX = 9;
+		sizeY = 12;
 	}
 	
 	

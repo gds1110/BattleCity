@@ -3,7 +3,8 @@
 #include "Missile.h"
 
 #define SUMMON_MAX_FRAME 4
-
+#define SUMMON_MAX_TIME 1.5
+#define SUMMON_FRAME_TIME 0.1
 HRESULT PlayerShip::Init()
 {
 	if (image == nullptr)
@@ -18,7 +19,7 @@ HRESULT PlayerShip::Init()
 	}
 	if (summonImg == nullptr)
 	{
-		summonImg = ImageManager::GetSingleton()->AddImage("플레이어1탱크",
+		summonImg = ImageManager::GetSingleton()->AddImage("summoning",
 			"Image/Effect/Spawn_Effect.bmp", SUMMON_MAX_FRAME * size,size, SUMMON_MAX_FRAME, 1, true, RGB(255, 0, 255));
 		if (summonImg == nullptr)
 		{
@@ -26,8 +27,9 @@ HRESULT PlayerShip::Init()
 			return E_FAIL;
 		}
 	}
-
-	
+	summonTimer = 0;
+	summonFrame = 0;
+	totalSummonTimer = 0;
 	movestat = MoveInfo::STOP;
 	renderStat = RenderInfo::TOP;
 	isSummon = false;
@@ -52,7 +54,7 @@ HRESULT PlayerShip::Init()
 
 	isAlive = true;
 	isDying = false;
-
+	Appear();
 	return S_OK;
 }
 
@@ -89,7 +91,7 @@ void PlayerShip::Update()
 	{
 		OnDead();
 	}
-	else if(!isSummon)
+	else if(!isSummon&& isAlive)//실제 작동부
 	{
 		movestat = MoveInfo::STOP;
 		if (KeyManager::GetSingleton()->IsStayKeyDown(VK_UP))
@@ -159,6 +161,25 @@ void PlayerShip::Update()
 		}
 		
 	}
+	else //소환중
+	{
+		summonTimer+= TimerManager::GetSingleton()->GetElapsedTime();
+		totalSummonTimer+= TimerManager::GetSingleton()->GetElapsedTime();
+		if (summonTimer >= SUMMON_FRAME_TIME)
+		{
+			summonTimer -= SUMMON_FRAME_TIME;
+			++summonFrame;
+		}
+		if (summonFrame >= SUMMON_MAX_FRAME)
+		{
+			summonFrame = 0;
+		}
+		if (totalSummonTimer >= SUMMON_MAX_TIME)
+		{
+			isSummon = false;
+		}
+
+	}
 	for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
 	{
 		missile[i].Update();
@@ -206,7 +227,10 @@ void PlayerShip::Render(HDC hdc)
 			//image->Render(hdc, pos.x, pos.y);
 		}
 	}
-	
+	else
+	{
+		summonImg->FrameRender(hdc, pos.x, pos.y, summonFrame, 0, true);
+	}
 	if (missile) 
 	{
 		for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
@@ -255,4 +279,10 @@ void PlayerShip::Fire()
 
 void PlayerShip::Appear(void)
 {
+	isSummon = true;
+	isAlive = true;
+	HP = 1;
+	summonFrame = 0;
+	summonTimer = 0;
+	totalSummonTimer = 0;
 }
