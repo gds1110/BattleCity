@@ -10,12 +10,17 @@ public:
 
 private:
 	// ÀÌ¹ÌÁö
-	Image* img;
+	Image* imgLeft;
+	Image* imgRight;
+	Image* imgUp;
+	Image* imgDown;
+	Image* imgExplosion;
 
 	FPOINT pos;
 	float moveSpeed;
 	float moveTime;
-	int size;
+	int sizeX;
+	int sizeY;
 	RECT shape;
 	int damage;
 	float angle;
@@ -24,11 +29,17 @@ private:
 	int fireIndex;
 	int fireStep;
 
+	float imsideltaTime;
+
+	float exlposionTimer;
+	POINT  explosionPos;
+	int  explosionFrame;
+	bool isDying;
+
 	//GameNode* target;
 	Enemy* target;
 	float destAngle;
 
-	Enemy* owner;
 
 public:
 	HRESULT Init();
@@ -40,6 +51,7 @@ public:
 	void MovingSkill_01();
 	void MovingFollowTarget();
 
+	
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline FPOINT GetPos() { return this->pos; }
 	void SetIsFired(bool isFired);
@@ -50,6 +62,6 @@ public:
 	inline void SetAngle(float angle) { this->angle = angle; }
 	inline void SetFireIndex(int fireIndex) { this->fireIndex = fireIndex; }
 
-	inline int GetSize() { return this->size; }
+	inline POINT GetSize() { return {this->sizeX,this->sizeY}; }
 };
 
