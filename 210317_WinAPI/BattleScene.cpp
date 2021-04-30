@@ -7,6 +7,7 @@
 #include "PlayerShip.h"
 #include "CommonFunction.h"
 #include "BattleUi.h"
+#include "Item.h"
 
 HRESULT BattleScene::Init()
 {
@@ -30,6 +31,8 @@ HRESULT BattleScene::Init()
 	battleUi = new BattleUi();
 	battleUi->Init();
 
+	item = new Item();
+	item->Init();
 	StageLoad(2);
 
 
@@ -78,7 +81,6 @@ void BattleScene::Render(HDC hdc)
 		uiSpace->Render(hdc, TILE_X * TILESIZE, 0);
 	}
 	
-	
 
 	if (enemyMgr)
 	{
@@ -104,6 +106,8 @@ void BattleScene::Render(HDC hdc)
 	{
 		battleUi->Render(hdc);
 	}
+	item->Render(hdc);
+
 
 }
 

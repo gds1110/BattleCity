@@ -50,6 +50,11 @@ void LoadingScene::Update()
 		onStage = true;
 
 	}
+	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+	{
+		onStage = true;
+	}
+
 	if (onStage)
 	{
 		time += ElapsedT;

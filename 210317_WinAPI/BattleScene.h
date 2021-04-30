@@ -10,6 +10,7 @@ class EnemyManager;
 class Image;
 class TilemapTool;
 class BattleUi;
+class Item;
 class BattleScene : public GameNode
 {
 private:
@@ -24,6 +25,8 @@ private:
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
 
+
+	Item* item;
 	// hitBox
 	//vector<RECT> vEnemyHitRc;
 
