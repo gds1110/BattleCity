@@ -2,14 +2,13 @@
 #include "GameNode.h"
 
 
-
-
 // 기존 MainGame 클래스의 내용을 이동
 class PlayerShip;
 class EnemyManager;
 class Image;
 class TilemapTool;
 class BattleUi;
+class Enemy;
 class BattleScene : public GameNode
 {
 private:
@@ -25,7 +24,8 @@ private:
 	BattleUi* battleUi;
 
 	// hitBox
-	//vector<RECT> vEnemyHitRc;
+	vector<RECT> vEnemyHitRc;
+	vector<Enemy*> vEnemys;
 	RECT playerHitRc;
 
 public:
@@ -37,6 +37,7 @@ public:
 	void StageLoad(int stageNum);
 
 	void CheckCollision();
+	void HitBox();
 
 	virtual ~BattleScene() {};
 };

@@ -35,13 +35,16 @@ HRESULT Enemy::Init(int posX, int posY)
     // 기본 정보
     pos.x =  posX;
     pos.y = posY;
-    size = 80;
+    sizeW = image->GetFrameWidth();
+    sizeH = image->GetFrameHeight();
     hitRc = { 0, 0, 0, 0 };
     moveSpeed = 100.0f;
-    isAlive = true;
-    temppos = pos;
+    isAlive = false;
+    tempPos = pos;
+
     // 움직임
     state = 1;
+    isCol = false;
 
     // 미사일
     missile = new Missile();
@@ -65,8 +68,8 @@ void Enemy::Update()
         else
         {
             Move();
-            //Direction();
-
+            Direction();
+            CheckCollision();
             // 미사일 발사
             if (missile)
             {
@@ -91,6 +94,8 @@ void Enemy::Render(HDC hdc)
             Rectangle(hdc, hitRc.left, hitRc.top, hitRc.right, hitRc.bottom);
             if (image)  image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
             if (missile)    missile->Render(hdc);
+            wsprintf(szText, "X : %d",index);
+            TextOut(hdc, pos.x, pos.y, szText, strlen(szText));
         }
     }
 }
@@ -102,88 +107,77 @@ void Enemy::Move()
     switch (state)
     {
     case UP:
-        temppos.y = pos.y - moveSpeed * elapsedTime;
-        if (temppos.y < 0 + image->GetFrameHeight() / 2 /*&&*/)
-        {
-            /*pos.y = 0 + image->GetFrameHeight() / 2;
-            pos.x = pos.x;*/
-            state = rand() % 2 + 2;
-
-        }
         currFrameX = 1;
         pos.y -= moveSpeed * elapsedTime;
+        tempPos.y = pos.y - moveSpeed * elapsedTime;
         dir = 90;
         break;
     case DOWN:
-        temppos.y = pos.y + moveSpeed * elapsedTime;
         dir = -90;
-        if (temppos.y > TILESIZE * TILE_Y - image->GetFrameHeight() / 2 /*&&*/)
-        {
-            state = rand() % 2 + 2;
-        }
         currFrameX = 5;
         pos.y += moveSpeed * elapsedTime;
+        tempPos.y = pos.y + moveSpeed * elapsedTime;
         
         break;
     case LEFT:
-        temppos.x = pos.x - moveSpeed * elapsedTime;
-        if (temppos.x < 0 + image->GetFrameWidth() /*&&*/)
-        {
-            state = rand() % 2;
-        }
         currFrameX = 3;
         pos.x -= moveSpeed * elapsedTime;
+        tempPos.x = pos.x - moveSpeed * elapsedTime;
         dir = 180;
         break;
     case RIGHT:
-        temppos.x = pos.x + moveSpeed * elapsedTime;
-        if (temppos.x > TILE_X * TILESIZE - image->GetFrameWidth() / 2 /*&&*/)
-        {
-            state = rand() % 2;
-        }
         currFrameX = 7;
         pos.x += moveSpeed * elapsedTime;
+        tempPos.x = pos.x + moveSpeed * elapsedTime;
         dir = 0;
         break;
     }
     HitBox();
 }
 
-//void Enemy::Direction()
-//{
-//    float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
-//    srand(time(NULL));
-//    switch (state)
-//    {
-//    case UP:
-//        if (temppos.y < 0 + image->GetFrameHeight() / 2 /*&&*/)
-//        {
-//            state = rand() % 2 + 2;
-//        }
-//        break;
-//    case DOWN:
-//        if (temppos.y > TILESIZE * TILE_Y - image->GetFrameHeight() / 2 /*&&*/)
-//        {
-//            state = rand() % 2 + 2;
-//        }
-//        break;
-//    case LEFT:
-//        if (temppos.x < 0 + image->GetFrameWidth() /*&&*/)
-//        {
-//            state = rand() % 2;
-//        }
-//        break;
-//    case RIGHT:
-//        if (temppos.x > TILE_X * TILESIZE - image->GetFrameWidth() / 2 /*&&*/)
-//        {
-//            state = rand() % 2;
-//        }
-//        break;
-//    }
-//
-//
-//
-//}
+void Enemy::Direction()
+{
+    float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
+    srand(time(NULL));
+    switch (state)
+    {
+    case UP:
+        if (tempPos.y < 0 + image->GetFrameHeight() / 2/* || isCol*/)
+        {
+            pos.y = 0 + image->GetFrameHeight() / 2;
+            pos.x = pos.x;
+            state = rand() % 2 + 2;
+        }
+        break;
+    case DOWN:
+        if (tempPos.y > TILESIZE * TILE_Y - image->GetFrameHeight() / 2/* || isCol*/)
+        {
+            pos.y = TILESIZE * TILE_Y - image->GetFrameHeight() / 2;
+            pos.x = pos.x;
+            state = rand() % 2 + 2;
+        }
+        break;
+    case LEFT:
+        if (tempPos.x < 0 + sizeW / 2)
+        {
+            pos.x = 0 + sizeW / 2;
+            pos.y = pos.y;
+            state = rand() % 2;
+        }
+        break;
+    case RIGHT:
+        if (tempPos.x > TILE_X * TILESIZE - sizeW / 2)
+        {
+            pos.x = TILE_X * TILESIZE - sizeW / 2;
+            pos.y = pos.y;
+            state = rand() % 2;
+        }
+        break;
+    }
+
+
+
+}
 
 void Enemy::Dead()
 {
@@ -220,10 +214,39 @@ void Enemy::EffectFrame()
 
 void Enemy::HitBox()
 {
-    hitRc.left = pos.x - image->GetFrameHeight() / 2;
-    hitRc.top = pos.y - image->GetFrameWidth() / 2;
-    hitRc.right = pos.x + image->GetFrameHeight() / 2;
-    hitRc.bottom = pos.y + image->GetFrameWidth() / 2;
+    hitRc.left = pos.x - image->GetFrameHeight() / 3;
+    hitRc.top = pos.y - image->GetFrameWidth() / 3;
+    hitRc.right = pos.x + image->GetFrameHeight() / 3;
+    hitRc.bottom = pos.y + image->GetFrameWidth() / 3;
+}
+
+void Enemy::CheckCollision()
+{
+    if (isCol)
+    {
+        //float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
+        srand(time(NULL));
+        switch (state)
+        {
+        case UP:
+            state = rand() % 4;
+            if(UP == state) state = rand() % 4;
+            break;
+        case DOWN:
+            state = rand() % 4;
+            if (DOWN == state) state = rand() % 4;
+            break;
+        case LEFT:
+            state = rand() % 4;
+            if (LEFT == state) state = rand() % 4;
+            break;
+        case RIGHT:
+            state = rand() % 4;
+            if (RIGHT == state) state = rand() % 4;
+            break;
+        }
+        isCol = false;
+    }
 }
 
 

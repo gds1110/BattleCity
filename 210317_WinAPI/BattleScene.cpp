@@ -7,6 +7,7 @@
 #include "PlayerShip.h"
 #include "CommonFunction.h"
 #include "BattleUi.h"
+#include "config.h"
 
 HRESULT BattleScene::Init()
 {
@@ -30,10 +31,12 @@ HRESULT BattleScene::Init()
 	battleUi->Init();
 
 	StageLoad(2);
-
+	//vEnemys;
+	
 	//hitBox
-	playerHitRc = {};
-
+	//playerHitRc = {};
+	
+	HitBox();
 
 	return S_OK;
 }
@@ -48,7 +51,6 @@ void BattleScene::Release()
 
 void BattleScene::Update()
 {
-	
 	if (enemyMgr)
 	{
 		enemyMgr->Update();
@@ -80,7 +82,6 @@ void BattleScene::Render(HDC hdc)
 		uiSpace->Render(hdc, TILE_X * TILESIZE, 0);
 	}
 	
-	
 
 	if (enemyMgr)
 	{
@@ -107,6 +108,8 @@ void BattleScene::Render(HDC hdc)
 		battleUi->Render(hdc);
 	}
 
+	//Rectangle(hdc, vEnemyHitRc[0].left, vEnemyHitRc[0].top, vEnemyHitRc[0].right, vEnemyHitRc[0].bottom);
+
 }
 
 void BattleScene::StageLoad(int stageNum)
@@ -128,19 +131,33 @@ void BattleScene::StageLoad(int stageNum)
 
 void BattleScene::CheckCollision()
 {
-	// 히트박스 받아오기
-	for (int i = 0; i < 4; i++)
-	{
-		//vEnemyHitRc[i] = enemyMgr->GetHitRc(i);
-	}
 	// 더미 Rc
 	RECT dummyRc = { };
 
-	//RECT playerHitRc = 
 	// 적 <-> 적
-	//IntersectRect(&dummyRc, );
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (IntersectRect(&dummyRc, &vEnemyHitRc[i], &vEnemyHitRc[j]))
+			{
+				if (i == j) continue;
+				else
+				{
+					//vEnemys[i]->Direction();
+					//vEnemys[j]->Move();
+				}
+			}
+		}
+		
+	}
 
 	// 적 <-> 플레이어
+	if (IntersectRect(&dummyRc, &vEnemyHitRc[0], &playerHitRc))
+	{
+		int x = 1;
+	}
+
 
 	// 적 미사일 <-> 플레이어
 
@@ -149,6 +166,48 @@ void BattleScene::CheckCollision()
 	// 적 미사일 <-> 플레이어 미사일
 
 	// 적, 플레이어 <-> 벽돌
+
+	for (int j = 0; j < TILE_X * TILE_Y; j++)
+	{
+		HitBox();
+		for (int i = 0; i < 4; i++)
+		{
+			if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &TileInfo[j].rcTile))
+			{
+				switch (TileInfo[j].tileType)
+				{
+				case TileType::NORMAL: case TileType::IRON: case TileType::RIVER: case TileType::EAGLE:
+					switch (vEnemys[i]->GetState())
+					{
+						// 왼쪽으로 이동
+					case 2:
+						vEnemys[i]->SetPos({ float(TileInfo[j].rcTile.right + vEnemys[0]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+						break;
+						// 위로 이동
+					case 0:
+						vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x,float(TileInfo[j].rcTile.bottom + vEnemys[0]->GetSizeH() / 2) });
+						break;
+						// 오른쪽으로 이동
+					case 3:
+						vEnemys[i]->SetPos({ float(TileInfo[j].rcTile.left - vEnemys[0]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+						break;
+						//아래로 이동
+					case 1:
+						vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x ,float(TileInfo[j].rcTile.top - vEnemys[0]->GetSizeH() / 2) });
+
+						break;
+					}
+					vEnemys[i]->SetIsCol(true);
+					break;
+				case TileType::BLACK:
+					break;
+				default:
+					break;
+				}
+			}
+
+		}
+	}
 
 	// 적, 플레이어 <-> 강
 
@@ -170,4 +229,17 @@ void BattleScene::CheckCollision()
 
 	// 적, 플레이어, 미사일 <-> 수리
 	
+}
+
+void BattleScene::HitBox()
+{
+	// 플레이어 RECT
+	playerHitRc = playerShip->GetShape();
+
+	// enemy RECT
+	vEnemys = enemyMgr->GetEnemys();
+	for (int i = 0; i < 4; i++)
+	{
+		vEnemyHitRc.push_back(vEnemys[i]->hitRc);
+	}
 }

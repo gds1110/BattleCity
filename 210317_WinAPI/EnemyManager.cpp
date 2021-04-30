@@ -3,13 +3,14 @@
 
 HRESULT EnemyManager::Init()
 {
-    enemyCount = 20;
+    enemyCount = 15;
     // 적 생성 20마리
     vEnemys.resize(enemyCount);
     for (int i = 0; i < enemyCount; i++)
     {
         vEnemys[i] = new Enemy();
         vEnemys[i]->Init(-100, -100);
+        vEnemys[i]->setindex(i);
     }
 
     vEnemyGenPos.push_back({ 50, 50 });
@@ -44,7 +45,9 @@ void EnemyManager::Update()
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
-        (*it)->Update();
+        if ((*it)->GetIsAlive() == true) {
+            (*it)->Update();
+        }
     }
 }
 
@@ -59,41 +62,37 @@ void EnemyManager::Render(HDC hdc)
 
 void EnemyManager::RegenEnemy()
 {
-    if (ememyRegenCount >= 4)
+    if (ememyRegenCount > 3)
     {
         regenEnemy = false;
     }
     else if (ememyRegenCount <= 3)
     {
         regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
-        if (regenTimer >= 3.0f)
+        if (regenTimer >= 2.0f)
         {
             vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
             vEnemys[iIndex]->SetIsGenEffect(true);
-
+            vEnemys[iIndex]->SetIsAlive(true);
             // 히트박스 저장
             //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
+
             ememyRegenCount++;
             posIndex++;
-            iIndex++;
-            regenTimer = 0.0f;
-            if (posIndex > 2)
+            if (posIndex ==3)
             {
                 posIndex = 0;
             }
+            if (iIndex < 3) {
+                iIndex+=1;
+            }
+            regenTimer = 0.0f;
         }
     }
 
-    if (iIndex < enemyCount)
+    if (0 >= enemyCount)
     {
         regenEnemy = false;
     }
 }
 
-//RECT EnemyManager::GetHitRc(int count)
-//{
-//    for (int i = 0; i < 4; i++)
-//    {
-//        if (i == count) return vHitRc[i];
-//    }
-//}
