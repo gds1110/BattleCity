@@ -10,6 +10,7 @@ class TilemapTool;
 class BattleUi;
 class Item;
 class ItemManager;
+class Enemy;
 class BattleScene : public GameNode
 {
 private:
@@ -29,7 +30,9 @@ private:
 
 	Item* item;
 	// hitBox
-	//vector<RECT> vEnemyHitRc;
+	vector<RECT> vEnemyHitRc;
+	vector<Enemy*> vEnemys;
+	RECT playerHitRc;
 
 public:
 	virtual HRESULT Init();
@@ -40,6 +43,7 @@ public:
 	void StageLoad(int stageNum);
 
 	void CheckCollision();
+	void HitBox();
 
 	virtual ~BattleScene() {};
 
