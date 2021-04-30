@@ -8,11 +8,14 @@
 
 HRESULT MainGame::Init()
 {
+	srand(time(NULL));
+
 	hdc = GetDC(g_hWnd);
 
 	KeyManager::GetSingleton()->Init();
 	ImageManager::GetSingleton()->Init();
 	SceneManager::GetSingleton()->Init();
+
 
 	// 이미지를 미리 로드한다
 	/*ImageManager::GetSingleton()->AddImage("Enemy",
@@ -59,6 +62,7 @@ void MainGame::Release()
 
 void MainGame::Update()
 {
+
 	SceneManager::GetSingleton()->Update();
 }
 
