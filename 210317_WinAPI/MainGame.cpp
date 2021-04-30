@@ -4,6 +4,7 @@
 #include "BattleScene.h"
 #include "TitleScene.h"
 #include "ScoreScene.h"
+#include "LoadingScene.h"
 
 HRESULT MainGame::Init()
 {
@@ -36,8 +37,9 @@ HRESULT MainGame::Init()
 	SceneManager::GetSingleton()->AddScene("≈∏¿œ∏ ≈¯", new TilemapTool());
 	SceneManager::GetSingleton()->AddScene("≈∏¿Ã∆≤æ¿", new TitleScene());
 	SceneManager::GetSingleton()->AddScene("Ω∫ƒ⁄æÓ", new ScoreScene());
-
+	SceneManager::GetSingleton()->AddScene("∑Œµ˘æ¿", new LoadingScene());
 	SceneManager::GetSingleton()->ChangeScene("≈∏¿Ã∆≤æ¿");
+	
 
 	isInited = true;
 
