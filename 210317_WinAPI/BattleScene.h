@@ -26,6 +26,7 @@ private:
 
 	// hitBox
 	//vector<RECT> vEnemyHitRc;
+	RECT playerHitRc;
 
 public:
 	virtual HRESULT Init();

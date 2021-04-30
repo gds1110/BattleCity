@@ -31,6 +31,9 @@ HRESULT BattleScene::Init()
 
 	StageLoad(2);
 
+	//hitBox
+	playerHitRc = {};
+
 
 	return S_OK;
 }
@@ -130,8 +133,12 @@ void BattleScene::CheckCollision()
 	{
 		//vEnemyHitRc[i] = enemyMgr->GetHitRc(i);
 	}
+	// 더미 Rc
+	RECT dummyRc = { };
 
+	//RECT playerHitRc = 
 	// 적 <-> 적
+	//IntersectRect(&dummyRc, );
 
 	// 적 <-> 플레이어
 
