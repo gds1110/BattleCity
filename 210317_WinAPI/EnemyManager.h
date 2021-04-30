@@ -28,7 +28,6 @@ public:
 	// get, set
 	inline void SetIsEnemyCount(int enemyCount) { this->enemyCount = enemyCount; }
 	inline int GetIsEnemyCount() { return this->enemyCount; }
-	inline vector<Enemy*> GetEnemys() { return vEnemys; }
 	//RECT GetHitRc(int count);
 };
 
