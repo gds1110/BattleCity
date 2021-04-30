@@ -71,16 +71,6 @@ void PlayerShip::Release()
 
 void PlayerShip::Update()
 {
-	if (isAlive && KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
-	{
-		isAlive = false;
-		if (!isDying)
-		{
-			isDying = true;
-			isAlive = false;
-		}
-		
-	}
 	if (HP<=0)
 	{
 		isAlive = false;

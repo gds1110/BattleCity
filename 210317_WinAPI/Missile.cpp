@@ -207,3 +207,9 @@ void Missile::SetIsFired(bool isFired)
 {
 	this->isFired = isFired;
 }
+
+void Missile::Dead(void)
+{
+	this->isDying = true;
+	isFired = false;
+}
