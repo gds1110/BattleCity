@@ -6,6 +6,8 @@ class Item;
 class ItemManager : public GameNode
 {
 private:
+	vector<Item*> vItems;
+	vector<Item*>::iterator itItem;
 
 
 
@@ -15,5 +17,6 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
+	void DropItem(POINT pos,int type);
 };
 

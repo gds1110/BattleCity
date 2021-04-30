@@ -3,9 +3,24 @@
 class Image;
 class Item: public GameNode
 {
+public:
+	enum ITEMTYPE
+	{
+		SHILED,
+		TIME,
+		IRONWALL,
+		STAR,
+		BOOM,
+		TANK,
+		MISSILE,
+		NONE
+	};
+
 private:
 	Image* itemImg;
-
+	int itemType;
+	POINT pos;
+	bool isDrop;
 
 public:
 	HRESULT Init();
@@ -13,5 +28,13 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
+	inline void SetType(int type) { this->itemType = type; }
+	inline int GetType() { return this->itemType; }
+
+	inline void SetPos(POINT pos) { this->pos = pos; }
+	inline POINT getPos() { return this->pos; }
+
+	inline void SetDrop(bool drop) { this->isDrop = drop; }
+	inline bool GetDrop() { return this->isDrop; }
 };
 

@@ -97,7 +97,7 @@ void Enemy::Render(HDC hdc)
 
 void Enemy::Move()
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
     switch (state)
     {

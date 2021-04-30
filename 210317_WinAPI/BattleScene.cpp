@@ -8,9 +8,11 @@
 #include "CommonFunction.h"
 #include "BattleUi.h"
 #include "Item.h"
+#include "ItemManager.h"
 
 HRESULT BattleScene::Init()
 {
+
 	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
 
 	bin = new Image();
@@ -23,6 +25,9 @@ HRESULT BattleScene::Init()
 	playerShip = new PlayerShip();
 	playerShip->Init();
 
+	itemMgr = new ItemManager();
+	itemMgr->Init();
+
 	sampleTile = ImageManager::GetSingleton()->AddImage(
 		"샘플타일", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
@@ -31,8 +36,8 @@ HRESULT BattleScene::Init()
 	battleUi = new BattleUi();
 	battleUi->Init();
 
-	item = new Item();
-	item->Init();
+	itemTimer = 0;
+
 	StageLoad(2);
 
 
@@ -49,12 +54,25 @@ void BattleScene::Release()
 
 void BattleScene::Update()
 {
-	
+	itemTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	int random;
+	int typeRandom;
+	if (itemTimer > 3.0f)
+	{
+		random = rand()% (TILE_X * TILE_Y);
+		typeRandom = rand() % 8;
+		if (TileInfo[random].tileType == TileType::BLACK)
+		{
+			itemMgr->DropItem({ TileInfo[random].rcTile.left+(TILESIZE/2),TileInfo[random].rcTile.top+ (TILESIZE / 2) }, typeRandom);
+			itemTimer = 0;
+		}
+	}
+
 	if (enemyMgr)
 	{
 		enemyMgr->Update();
 	}
-
+	
 
 	if (playerShip)
 	{
@@ -65,7 +83,11 @@ void BattleScene::Update()
 	{
 		battleUi->Update();
 	}
-
+	if (itemMgr)
+	{
+		itemMgr->Update();
+	}
+	
 	CheckCollision();
 }
 
@@ -101,12 +123,14 @@ void BattleScene::Render(HDC hdc)
 			TileInfo[i].frameX,
 			TileInfo[i].frameY);
 	}
-
+	if (itemMgr)
+	{
+		itemMgr->Render(hdc);
+	}
 	if (battleUi)
 	{
 		battleUi->Render(hdc);
 	}
-	item->Render(hdc);
 
 
 }
@@ -168,4 +192,8 @@ void BattleScene::CheckCollision()
 
 	// 적, 플레이어, 미사일 <-> 수리
 	
+}
+
+void BattleScene::ItemSkill(int a)
+{
 }
