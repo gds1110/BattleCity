@@ -29,7 +29,7 @@ HRESULT BattleScene::Init()
 	battleUi = new BattleUi();
 	battleUi->Init();
 
-	StageLoad(1);
+	StageLoad(2);
 
 
 	return S_OK;
@@ -125,45 +125,42 @@ void BattleScene::StageLoad(int stageNum)
 
 void BattleScene::CheckCollision()
 {
-	// 적 <-> 탱크 미사일 
-	float distance;
-	FPOINT enemyPos;
-	FPOINT missilePos;
-	float x, y;
-	int r1, r2;
-	//Missile* missileArray = tank->GetMissile();
+	// 히트박스 받아오기
+	for (int i = 0; i < 4; i++)
+	{
+		//vEnemyHitRc[i] = enemyMgr->GetHitRc(i);
+	}
 
-	//for (int i = 0; i < enemyCount; i++)
-	//{
-	//	if (enemy[i].GetIsAlive() == false)	continue;
+	// 적 <-> 적
 
-	//	for (int j = 0; j < tank->GetMissileCount(); j++)
-	//	{
-	//		if (missileArray[j].GetIsFired() == false)	continue;
+	// 적 <-> 플레이어
 
-	//		enemyPos = enemy[i].GetPos();
-	//		missilePos = missileArray[j].GetPos();
+	// 적 미사일 <-> 플레이어
 
-	//		x = enemyPos.x - missilePos.x;
-	//		y = enemyPos.y - missilePos.y;
+	// 플레이어 미사일 <-> 적
 
-	//		distance = sqrtf(x * x + y * y);
+	// 적 미사일 <-> 플레이어 미사일
 
-	//		r1 = enemy[i].GetSize() / 2;
-	//		r2 = missileArray[j].GetSize() / 2;
+	// 적, 플레이어 <-> 벽돌
 
-	//		if (distance <= r1 + r2)
-	//		{
-	//			enemy[i].SetIsAlive(false);
-	//			missileArray[j].SetIsFired(false);
-	//			break;
-	//		}
-	//	}
-	//}
+	// 적, 플레이어 <-> 강
 
-	// 적 <-> 탱크
+	// 적, 플레이어 <-> 강철
 
-	// 적 미사일 <-> 탱크
+	// 적, 플레이어 <-> 숲
 
-	// 적 미사일 <-> 탱크 미사일
+	// 적, 플레이어 <-> 얼음
+
+	// 적, 플레이어 미사일 <-> 벽돌
+				   
+	// 적, 플레이어 미사일 <-> 강
+				   
+	// 적, 플레이어 미사일 <-> 강철
+				   
+	// 적, 플레이어 미사일 <-> 숲
+				   
+	// 적, 플레이어 미사일 <-> 얼음
+
+	// 적, 플레이어, 미사일 <-> 수리
+	
 }

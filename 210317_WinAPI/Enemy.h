@@ -12,6 +12,7 @@ private:
 	Image* image;
 	int currFrameX;
 	FPOINT pos;
+	FPOINT temppos;
 	int size;
 	RECT hitRc;
 	float moveSpeed;
@@ -42,6 +43,7 @@ public:
 	void Dead();
 	void IsFired();
 	void EffectFrame();
+	void HitBox();
 
 	// get, set
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
@@ -50,6 +52,7 @@ public:
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
 	inline void SetIsGenEffect(bool isGenEffect) { this->isGenEffect = isGenEffect; }
-	inline RECT getHitRc() { return this->hitRc; }
+	inline RECT GetHitRc() { return this->hitRc; }
+	
 };
 

@@ -23,6 +23,10 @@ private:
 	EnemyManager* enemyMgr;
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
+
+	// hitBox
+	//vector<RECT> vEnemyHitRc;
+
 public:
 	virtual HRESULT Init();
 	virtual void Release();
