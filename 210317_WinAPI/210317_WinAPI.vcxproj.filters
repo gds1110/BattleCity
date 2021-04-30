@@ -111,6 +111,9 @@
     <ClCompile Include="BattleUi.cpp">
       <Filter>MainGame</Filter>
     </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="BattleUi.h">
       <Filter>MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>MainGame\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

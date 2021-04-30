@@ -26,6 +26,7 @@ HRESULT BattleScene::Init()
 		"»ùÇÃÅ¸ÀÏ", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
 
+
 	battleUi = new BattleUi();
 	battleUi->Init();
 
