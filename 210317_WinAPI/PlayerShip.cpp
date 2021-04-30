@@ -33,7 +33,9 @@ HRESULT PlayerShip::Init()
 	movestat = MoveInfo::STOP;
 	renderStat = RenderInfo::TOP;
 	isSummon = false;
-	
+	shape={};
+
+
 	pos.x = WINSIZE_X / 2;
 	pos.y = WINSIZE_Y / 2;
 
@@ -75,6 +77,7 @@ void PlayerShip::Update()
 		if (!isDying)
 		{
 			isDying = true;
+			isAlive = false;
 		}
 		
 	}
@@ -84,6 +87,7 @@ void PlayerShip::Update()
 		if (!isDying)
 		{
 			isDying = true;
+			isAlive = false;
 		}
 		
 	}
@@ -91,95 +95,100 @@ void PlayerShip::Update()
 	{
 		OnDead();
 	}
-	else if(!isSummon&& isAlive)//실제 작동부
+	else if(isAlive)//실제 작동부
 	{
-		movestat = MoveInfo::STOP;
-		if (KeyManager::GetSingleton()->IsStayKeyDown(VK_UP))
+		if (!isSummon)
 		{
-			if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::TOP)) 
+			movestat = MoveInfo::STOP;
+			if (KeyManager::GetSingleton()->IsStayKeyDown(VK_UP))
 			{
-				movestat = MoveInfo::TOP;
-				renderStat = RenderInfo::TOP;
-				barrelEnd = { pos.x,pos.y - size / 2 };
-				barrelAngle = PI / 2;
+				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::TOP))
+				{
+					movestat = MoveInfo::TOP;
+					renderStat = RenderInfo::TOP;
+					barrelEnd = { pos.x,pos.y - size / 2 };
+					barrelAngle = PI / 2;
+				}
 			}
-		}
-		else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_DOWN))
-		{
-			if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::BOTTOM))
+			else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_DOWN))
 			{
-				movestat = MoveInfo::BOTTOM;
-				renderStat = RenderInfo::BOTTOM;
-				barrelEnd = { pos.x,pos.y + size / 2 };
-				barrelAngle = -PI / 2;
+				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::BOTTOM))
+				{
+					movestat = MoveInfo::BOTTOM;
+					renderStat = RenderInfo::BOTTOM;
+					barrelEnd = { pos.x,pos.y + size / 2 };
+					barrelAngle = -PI / 2;
+				}
 			}
-		}
-		else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_LEFT))
-		{
-			if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::LEFT))
+			else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_LEFT))
 			{
-				movestat = MoveInfo::LEFT;
-				renderStat = RenderInfo::LEFT;
-				barrelEnd = { pos.x - size / 2,pos.y  };
-				barrelAngle = PI;
+				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::LEFT))
+				{
+					movestat = MoveInfo::LEFT;
+					renderStat = RenderInfo::LEFT;
+					barrelEnd = { pos.x - size / 2,pos.y };
+					barrelAngle = PI;
+				}
 			}
-		}
-		else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_RIGHT))
-		{
-			if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::RIGHT))
+			else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_RIGHT))
 			{
-				movestat = MoveInfo::RIGHT;
-				renderStat = RenderInfo::RIGHT;
-				barrelEnd = { pos.x + size / 2,pos.y };
-				barrelAngle =0;
+				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::RIGHT))
+				{
+					movestat = MoveInfo::RIGHT;
+					renderStat = RenderInfo::RIGHT;
+					barrelEnd = { pos.x + size / 2,pos.y };
+					barrelAngle = 0;
+				}
 			}
-		}
-		if (KeyManager::GetSingleton()->IsStayKeyDown(VK_SPACE))
-		{
-			Fire();
-		}
-		switch (movestat)
-		{
-		case MoveInfo::STOP:
-			break;
-		case MoveInfo::LEFT:
-			pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-			break;
-		case MoveInfo::RIGHT:
-			pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-			break;
-		case MoveInfo::TOP:
-			pos.y -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-			break;
-		case MoveInfo::BOTTOM:
-			pos.y += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-			break;
-		case MoveInfo::NONE:
-			break;
-		default:
-			break;
-		}
-		
-	}
-	else //소환중
-	{
-		summonTimer+= TimerManager::GetSingleton()->GetElapsedTime();
-		totalSummonTimer+= TimerManager::GetSingleton()->GetElapsedTime();
-		if (summonTimer >= SUMMON_FRAME_TIME)
-		{
-			summonTimer -= SUMMON_FRAME_TIME;
-			++summonFrame;
-		}
-		if (summonFrame >= SUMMON_MAX_FRAME)
-		{
-			summonFrame = 0;
-		}
-		if (totalSummonTimer >= SUMMON_MAX_TIME)
-		{
-			isSummon = false;
-		}
+			if (KeyManager::GetSingleton()->IsStayKeyDown(VK_SPACE))
+			{
+				Fire();
+			}
+			switch (movestat)
+			{
+			case MoveInfo::STOP:
+				break;
+			case MoveInfo::LEFT:
+				pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+				break;
+			case MoveInfo::RIGHT:
+				pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+				break;
+			case MoveInfo::TOP:
+				pos.y -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+				break;
+			case MoveInfo::BOTTOM:
+				pos.y += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+				break;
+			case MoveInfo::NONE:
+				break;
+			default:
+				break;
+			}
 
+		}
+		else //소환중
+		{
+			summonTimer += TimerManager::GetSingleton()->GetElapsedTime();
+			totalSummonTimer += TimerManager::GetSingleton()->GetElapsedTime();
+			if (summonTimer >= SUMMON_FRAME_TIME)
+			{
+				summonTimer -= SUMMON_FRAME_TIME;
+				++summonFrame;
+			}
+			if (summonFrame >= SUMMON_MAX_FRAME)
+			{
+				summonFrame = 0;
+			}
+			if (totalSummonTimer >= SUMMON_MAX_TIME)
+			{
+				isSummon = false;
+			}
+
+		}
+		shape = { (long)pos.x - size / 2,(long)pos.y - size / 2 ,(long)pos.x + size / 2 ,(long)pos.y + size / 2 };
 	}
+	
 	for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
 	{
 		missile[i].Update();
@@ -188,6 +197,7 @@ void PlayerShip::Update()
 
 void PlayerShip::Render(HDC hdc)
 {
+	Rectangle(hdc, shape.left, shape.top, shape.right, shape.bottom);
 	if (!isSummon)
 	{
 		if (image)
@@ -231,6 +241,7 @@ void PlayerShip::Render(HDC hdc)
 	{
 		summonImg->FrameRender(hdc, pos.x, pos.y, summonFrame, 0, true);
 	}
+	
 	if (missile) 
 	{
 		for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)

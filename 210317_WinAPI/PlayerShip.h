@@ -32,6 +32,7 @@ private:
 	//좌표
 	FPOINT	barrelEnd;
 	float	barrelAngle;
+	RECT shape;
 
 	//프레임+시간
 	int stateFrameX = 0;
@@ -65,5 +66,6 @@ public:
 
 	//Set, Get
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
+	inline RECT GetShape(void) { return this->shape; }
 };
 

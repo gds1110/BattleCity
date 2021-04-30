@@ -33,6 +33,8 @@ void EnemyManager::Release()
         delete (*it);
         (*it) = nullptr;
     }
+
+    vEnemyGenPos.clear();
 }
 
 void EnemyManager::Update()
@@ -68,6 +70,9 @@ void EnemyManager::RegenEnemy()
         {
             vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
             vEnemys[iIndex]->SetIsGenEffect(true);
+
+            // 히트박스 저장
+            //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
             ememyRegenCount++;
             posIndex++;
             iIndex++;
@@ -83,28 +88,12 @@ void EnemyManager::RegenEnemy()
     {
         regenEnemy = false;
     }
-   /* for (int i = 0; i < enemyCount; i++)
-    {
-        regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
-        if (ememyRegenCount >= 4)
-        {
-            break;
-        }
-
-        else
-        {
-            if (regenTimer >= 20.0f)
-            {
-                vEnemys[i]->SetPos(vEnemyGenPos[posIndex]);
-
-                ememyRegenCount++;
-                posIndex++;
-                if (posIndex > 2)
-                {
-                    posIndex = 0;
-                }
-                regenTimer = 0.0f;
-            }
-        }       
-    }*/
 }
+
+//RECT EnemyManager::GetHitRc(int count)
+//{
+//    for (int i = 0; i < 4; i++)
+//    {
+//        if (i == count) return vHitRc[i];
+//    }
+//}
