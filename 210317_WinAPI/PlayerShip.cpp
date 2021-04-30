@@ -105,6 +105,7 @@ void PlayerShip::Update()
 				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::TOP))
 				{
 					movestat = MoveInfo::TOP;
+					outputMove = 1;
 					renderStat = RenderInfo::TOP;
 					barrelEnd = { pos.x,pos.y - size / 2 };
 					barrelAngle = PI / 2;
@@ -115,6 +116,7 @@ void PlayerShip::Update()
 				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::BOTTOM))
 				{
 					movestat = MoveInfo::BOTTOM;
+					outputMove = 3;
 					renderStat = RenderInfo::BOTTOM;
 					barrelEnd = { pos.x,pos.y + size / 2 };
 					barrelAngle = -PI / 2;
@@ -125,6 +127,7 @@ void PlayerShip::Update()
 				if ((movestat == MoveInfo::STOP) || (movestat == MoveInfo::LEFT))
 				{
 					movestat = MoveInfo::LEFT;
+					outputMove = 0;
 					renderStat = RenderInfo::LEFT;
 					barrelEnd = { pos.x - size / 2,pos.y };
 					barrelAngle = PI;
@@ -136,6 +139,7 @@ void PlayerShip::Update()
 				{
 					movestat = MoveInfo::RIGHT;
 					renderStat = RenderInfo::RIGHT;
+					outputMove = 2;
 					barrelEnd = { pos.x + size / 2,pos.y };
 					barrelAngle = 0;
 				}
@@ -165,7 +169,22 @@ void PlayerShip::Update()
 			default:
 				break;
 			}
-
+			if (shape.left < 0)
+			{
+				pos.x = 0 + size / 2;
+			}
+			if (shape.top < 0)
+			{
+				pos.y = 0 + size / 2;
+			}
+			if (shape.right > TILE_X*TILESIZE)
+			{
+				pos.x = TILE_X * TILESIZE - size / 2;
+			}
+			if (shape.bottom > TILE_Y * TILESIZE)
+			{
+				pos.y = TILE_Y * TILESIZE - size / 2;
+			}
 		}
 		else //º“»Ø¡ﬂ
 		{
