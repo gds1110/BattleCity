@@ -130,7 +130,7 @@ void BattleScene::CheckCollision()
 	{
 		//vEnemyHitRc[i] = enemyMgr->GetHitRc(i);
 	}
-
+	RECT imsiRC = {};
 	// 적 <-> 적
 
 	// 적 <-> 플레이어
@@ -142,7 +142,36 @@ void BattleScene::CheckCollision()
 	// 적 미사일 <-> 플레이어 미사일
 
 	// 적, 플레이어 <-> 벽돌
-
+	if (playerShip)
+	{
+		if (playerShip->GetIsAlive())
+		{
+			for (int i = 0; i < sizeof(TileInfo) / sizeof(TILE_INFO); i++)
+			{
+				if (IntersectRect(&imsiRC, &playerShip->GetShape(), &TileInfo[i].rcTile))
+				{
+					switch (TileInfo[i].tileType)
+					{
+					case TileType::BLACK:
+						break;
+					case TileType::BUSH:
+						break;
+					case TileType::EAGLE:
+						break;
+					case TileType::ICE:
+						break;
+					case TileType::IRON:
+						break;
+					case TileType::NORMAL:
+						break;
+					case TileType::RIVER:
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 	// 적, 플레이어 <-> 강
 
 	// 적, 플레이어 <-> 강철

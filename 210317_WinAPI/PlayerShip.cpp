@@ -270,6 +270,17 @@ void PlayerShip::OnDead()
 		}
 	}
 }
+RECT PlayerShip::GetMissileShape(int index)
+{
+	if (missile)
+	{
+		if (missile[index].GetIsFired()) 
+		{
+			return missile[index].GetShape();
+		}
+	}
+	return {NULL,NULL ,NULL ,NULL };
+}
 void PlayerShip::Fire()
 {
 	// 미사일 발사

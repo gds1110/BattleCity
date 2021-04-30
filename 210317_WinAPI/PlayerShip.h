@@ -67,5 +67,7 @@ public:
 	//Set, Get
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline RECT GetShape(void) { return this->shape; }
+	inline bool GetIsAlive(void) { return this->isAlive; }
+	RECT GetMissileShape(int index);
 };
 
