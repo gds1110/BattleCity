@@ -86,10 +86,16 @@ void EnemyManager::RegenEnemy()
         }
     }
 
-    if (iIndex < enemyCount)
+    if (0 >= enemyCount)
     {
         regenEnemy = false;
     }
+}
+
+void EnemyManager::Dead()
+{
+    enemyCount -= 1;
+    ememyRegenCount -= 1;
 }
 
 //RECT EnemyManager::GetHitRc(int count)

@@ -211,12 +211,11 @@ void BattleScene::CheckCollision()
 
 	// 적 미사일 <-> 플레이어 미사일
 
-	// 적, 플레이어 <-> 벽돌
-
+	//적<->타일
 	for (int j = 0; j < TILE_X * TILE_Y; j++)
 	{
 		HitBox();
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
 		{
 			if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &TileInfo[j].rcTile))
 			{
@@ -254,7 +253,7 @@ void BattleScene::CheckCollision()
 
 		}
 	}
-
+	//플레이어<->타일
 	if (playerShip)
 	{
 		if (playerShip->GetIsAlive())
@@ -305,15 +304,31 @@ void BattleScene::CheckCollision()
 			}
 		}
 	}
+	RECT MissileRC = {};
+	MissileRC = playerShip->GetMissileShape(0);
+	//플레이어미사일<->적
+	if (enemyMgr)
+	{
+		for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
+		{
+			if (vEnemys[i]->GetIsAlive()) 
+			{
+				if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &MissileRC))
+				{
+					playerShip->MissileDead(0);
+					vEnemys[i]->Dead();
+					enemyMgr->Dead();
+				}
+				
+			}
+			
+		}
+	}
+	
+	
 
-	// 적, 플레이어 <-> 강
-
-	// 적, 플레이어 <-> 강철
-
-	// 적, 플레이어 <-> 숲
-
-	// 적, 플레이어 <-> 얼음
-
+	
+	
 	// 적, 플레이어 미사일 <-> 벽돌
 				   
 	// 적, 플레이어 미사일 <-> 강
@@ -335,7 +350,7 @@ void BattleScene::HitBox()
 
 	// enemy RECT
 	vEnemys = enemyMgr->GetEnemys();
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		vEnemyHitRc.push_back(vEnemys[i]->hitRc);
 	}

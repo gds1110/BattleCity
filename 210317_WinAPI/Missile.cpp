@@ -210,6 +210,8 @@ void Missile::SetIsFired(bool isFired)
 
 void Missile::Dead(void)
 {
-	this->isDying = true;
+	isDying = true;
 	isFired = false;
+	exlposionTimer = 0.0f;
+	explosionFrame = 0;
 }

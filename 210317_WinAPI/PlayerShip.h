@@ -72,6 +72,7 @@ public:
 	inline bool GetIsAlive(void) { return this->isAlive; }
 	inline int GetMoveStat(void) { return this->outputMove; }
 	inline int GetSize(void) { return this->size; }
+	void MissileDead(int index);
 	RECT GetMissileShape(int index);
 };
 

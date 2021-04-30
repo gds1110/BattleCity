@@ -279,6 +279,13 @@ void PlayerShip::OnDead()
 		}
 	}
 }
+void PlayerShip::MissileDead(int index)
+{
+	if (missile)
+	{
+		missile[index].Dead();
+	}
+}
 RECT PlayerShip::GetMissileShape(int index)
 {
 	if (missile)
