@@ -62,6 +62,7 @@ public:
 	inline void SetAngle(float angle) { this->angle = angle; }
 	inline void SetFireIndex(int fireIndex) { this->fireIndex = fireIndex; }
 
+	inline RECT GetShape(void) { return this->shape; }
 	inline POINT GetSize() { return {this->sizeX,this->sizeY}; }
 };
 

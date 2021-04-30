@@ -1,6 +1,6 @@
 #pragma once
 #include "GameNode.h"
-
+#include "Timer.h"
 
 // 기존 MainGame 클래스의 내용을 이동
 class PlayerShip;
@@ -8,6 +8,8 @@ class EnemyManager;
 class Image;
 class TilemapTool;
 class BattleUi;
+class Item;
+class ItemManager;
 class Enemy;
 class BattleScene : public GameNode
 {
@@ -19,10 +21,14 @@ private:
 	Image* bin;
 	Image* uiSpace;
 	Image* numImage;
+	ItemManager* itemMgr;
 	EnemyManager* enemyMgr;
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
 
+	float itemTimer;
+
+	Item* item;
 	// hitBox
 	vector<RECT> vEnemyHitRc;
 	vector<Enemy*> vEnemys;
@@ -40,5 +46,7 @@ public:
 	void HitBox();
 
 	virtual ~BattleScene() {};
+
+	void ItemSkill(int a);
 };
 

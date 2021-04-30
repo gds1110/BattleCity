@@ -9,6 +9,7 @@
 #include <ctime>
 #include <bitset>
 #include <map>
+#include <time.h>
 #include <vector>
 
 using namespace std;

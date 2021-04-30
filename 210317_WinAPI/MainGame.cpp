@@ -4,14 +4,18 @@
 #include "BattleScene.h"
 #include "TitleScene.h"
 #include "ScoreScene.h"
+#include "LoadingScene.h"
 
 HRESULT MainGame::Init()
 {
+	srand(time(NULL));
+
 	hdc = GetDC(g_hWnd);
 
 	KeyManager::GetSingleton()->Init();
 	ImageManager::GetSingleton()->Init();
 	SceneManager::GetSingleton()->Init();
+
 
 	// 이미지를 미리 로드한다
 	/*ImageManager::GetSingleton()->AddImage("Enemy",
@@ -36,8 +40,9 @@ HRESULT MainGame::Init()
 	SceneManager::GetSingleton()->AddScene("타일맵툴", new TilemapTool());
 	SceneManager::GetSingleton()->AddScene("타이틀씬", new TitleScene());
 	SceneManager::GetSingleton()->AddScene("스코어", new ScoreScene());
-
+	SceneManager::GetSingleton()->AddScene("로딩씬", new LoadingScene());
 	SceneManager::GetSingleton()->ChangeScene("타이틀씬");
+	
 
 	isInited = true;
 
@@ -57,6 +62,7 @@ void MainGame::Release()
 
 void MainGame::Update()
 {
+
 	SceneManager::GetSingleton()->Update();
 }
 

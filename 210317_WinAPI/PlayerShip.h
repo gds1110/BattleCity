@@ -33,6 +33,7 @@ private:
 	FPOINT	barrelEnd;
 	float	barrelAngle;
 	RECT shape;
+	int outputMove=10;
 
 	//프레임+시간
 	int stateFrameX = 0;
@@ -66,6 +67,11 @@ public:
 
 	//Set, Get
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
+	inline FPOINT GetPos(void) { return this->pos; }
 	inline RECT GetShape(void) { return this->shape; }
+	inline bool GetIsAlive(void) { return this->isAlive; }
+	inline int GetMoveStat(void) { return this->outputMove; }
+	inline int GetSize(void) { return this->size; }
+	RECT GetMissileShape(int index);
 };
 

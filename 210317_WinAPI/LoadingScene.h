@@ -1,16 +1,18 @@
 #pragma once
 #include "GameNode.h"
 class Image;
-class Button;
-class TitleScene : public GameNode
+class LoadingScene : public GameNode
 {
 private:
-	Image* titleImg;
-	Image* selIcon;
 
-	float titleposy;
-	RECT selRc;
-	POINT selIconPos;
+	Image* stageScene;
+	Image* blackScene;
+	Image* balckNum;
+
+	float posy_1;
+	float posy_2;
+	float time = 0;
+	bool onStage;
 
 public:
 	virtual HRESULT Init();

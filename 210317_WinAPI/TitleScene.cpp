@@ -12,6 +12,7 @@ HRESULT TitleScene::Init()
 	selIcon = ImageManager::GetSingleton()->AddImage(
 		"선택아이콘", "Image/SelectIcon2.bmp", 66, 60,true,RGB(255,0,255));
 
+	titleposy = TILESIZE * TILE_Y;
 	selIconPos = { 250,490 };
 	SetRect(&selRc, selIconPos.x - 33,
 		selIconPos.y - 30,
@@ -27,37 +28,52 @@ void TitleScene::Release()
 
 void TitleScene::Update()
 {
+	float ElapsedT = TimerManager::GetSingleton()->GetElapsedTime();
 
 	SetRect(&selRc, selIconPos.x - 33,
 		selIconPos.y - 30,
 		selIconPos.x + 33,
 		selIconPos.y + 30);
 
-
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_UP)&&selIconPos.y-60>=490) 
+	if (titleposy > 0)
 	{
-		selIconPos.y -= 60;
-	}
-	else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_DOWN) && selIconPos.y + 60 <= 550)
-	{
-		selIconPos.y += 60;
-	}
+		titleposy -= ElapsedT*500;
+		if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+		{
+			titleposy = 0;
+		}
 
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN) && selIconPos.y == 490) {
-
-		SceneManager::GetSingleton()->ChangeScene("전투_1");
-		//p1만
+		if (titleposy < 10)
+		{
+			titleposy = 0;
+		}
 	}
-	else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN) && selIconPos.y == 550)
-	{
-		//p2도
+	if (titleposy == 0) {
+		if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_UP) && selIconPos.y - 60 >= 490)
+		{
+			selIconPos.y -= 60;
+		}
+		else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_DOWN) && selIconPos.y + 60 <= 550)
+		{
+			selIconPos.y += 60;
+		}
+
+		if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN) && selIconPos.y == 490) {
+
+			SceneManager::GetSingleton()->ChangeScene("로딩씬");
+			//p1만
+		}
+		else if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN) && selIconPos.y == 550)
+		{
+			//p2도
+		}
 	}
 }
 
 void TitleScene::Render(HDC hdc)
 {
-	titleImg->Render(hdc);
-	selIcon->Render(hdc, 250, selIconPos.y, true);
+	titleImg->Render(hdc,0, titleposy);
+	selIcon->Render(hdc, 250, titleposy+selIconPos.y, true);
 	
 	//Rectangle(hdc, selRc.left, selRc.top, selRc.right, selRc.bottom);
 }
