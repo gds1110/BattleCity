@@ -94,8 +94,6 @@ void Enemy::Render(HDC hdc)
             Rectangle(hdc, hitRc.left, hitRc.top, hitRc.right, hitRc.bottom);
             if (image)  image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
             if (missile)    missile->Render(hdc);
-            wsprintf(szText, "X : %d",index);
-            TextOut(hdc, pos.x, pos.y, szText, strlen(szText));
         }
     }
 }

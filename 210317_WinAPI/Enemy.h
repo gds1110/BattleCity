@@ -19,7 +19,6 @@ private:
 	//RECT hitRc;
 	float moveSpeed;
 	bool isAlive;
-	int index;
 	// 미사일 관련 변수
 	Missile* missile;
 	int dir;
@@ -31,7 +30,6 @@ private:
 	bool isGenEffect;
 	int effectCount;
 
-	char szText[128] = "";
 	// 움직임 관련 변수
 	int state;
 	bool isCol;
@@ -64,7 +62,5 @@ public:
 	inline void SetIsCol(bool isCol) { this->isCol = isCol; }
 	inline void SetTempPos(FPOINT tempPos) { this->tempPos = tempPos; }
 	inline FPOINT GetTempPos() { return this->tempPos; }
-	
-	inline void setindex(int a) { this->index = a; }
 };
 
