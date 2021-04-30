@@ -12,6 +12,7 @@ private:
 	Image* image;
 	int currFrameX;
 	FPOINT pos;
+	FPOINT temppos;
 	int size;
 	RECT hitRc;
 	float moveSpeed;
@@ -26,6 +27,7 @@ private:
 	int updateCount;
 	int genEffectCurrFrameX;
 	bool isGenEffect;
+	int effectCount;
 
 	// 움직임 관련 변수
 	int state;
@@ -37,9 +39,11 @@ public:
 	void Render(HDC hdc);
 
 	void Move();
+	void Direction();
 	void Dead();
 	void IsFired();
 	void EffectFrame();
+	void HitBox();
 
 	// get, set
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
@@ -48,5 +52,7 @@ public:
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
 	inline void SetIsGenEffect(bool isGenEffect) { this->isGenEffect = isGenEffect; }
+	inline RECT GetHitRc() { return this->hitRc; }
+	
 };
 

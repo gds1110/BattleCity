@@ -14,6 +14,7 @@ private:
 	float regenTimer;
 	int iIndex;
 	bool regenEnemy;
+	//vector<RECT> vHitRc;
 
 public:
 	HRESULT Init();
@@ -27,5 +28,6 @@ public:
 	// get, set
 	inline void SetIsEnemyCount(int enemyCount) { this->enemyCount = enemyCount; }
 	inline int GetIsEnemyCount() { return this->enemyCount; }
+	//RECT GetHitRc(int count);
 };
 
