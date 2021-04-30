@@ -62,7 +62,7 @@ void BattleUi::Render(HDC hdc)
 	numImage->FrameRender(hdc,
 		(TILE_X * TILESIZE + 60),
 		760,
-		1 % 5,
-		1 / 5,
+		SceneManager::GetSingleton()->currStage % 5,
+		SceneManager::GetSingleton()->currStage / 5,
 		false);
 }

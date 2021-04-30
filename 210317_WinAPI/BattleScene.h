@@ -48,5 +48,8 @@ public:
 	virtual ~BattleScene() {};
 
 	void ItemSkill(int a);
+
+	void Save(void);
+	void Load(void);
 };
 
