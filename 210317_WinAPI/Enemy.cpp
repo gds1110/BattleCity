@@ -38,6 +38,7 @@ HRESULT Enemy::Init(int posX, int posY)
     sizeW = image->GetFrameWidth();
     sizeH = image->GetFrameHeight();
     hitRc = { 0, 0, 0, 0 };
+    //HitBox();
     moveSpeed = 100.0f;
     isAlive = false;
     tempPos = pos;
@@ -180,6 +181,7 @@ void Enemy::Direction()
 void Enemy::Dead()
 {
     isAlive = false;
+    
 }
 
 void Enemy::IsFired()

@@ -24,6 +24,7 @@ public:
 
 	void RegenEnemy();
 	void Dead();
+	void EnemyCollision();
 
 	// get, set
 	inline void SetIsEnemyCount(int enemyCount) { this->enemyCount = enemyCount; }

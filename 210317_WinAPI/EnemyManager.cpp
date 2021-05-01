@@ -72,7 +72,7 @@ void EnemyManager::RegenEnemy()
             vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
             vEnemys[iIndex]->SetIsGenEffect(true);
             vEnemys[iIndex]->SetIsAlive(true);
-
+            vEnemys[iIndex]->HitBox();
             // 히트박스 저장
             //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
             ememyRegenCount++;
@@ -89,6 +89,52 @@ void EnemyManager::RegenEnemy()
     if (iIndex < enemyCount)
     {
         regenEnemy = false;
+    }
+}
+
+void EnemyManager::Dead()
+{
+    enemyCount -= 1;
+    ememyRegenCount -= 1;
+}
+
+void EnemyManager::EnemyCollision()
+{
+    RECT dummyRc = { };
+    for (int i = 0; i < enemyCount; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (i == j) continue;
+            else
+            {
+                if (vEnemys[i]->GetIsAlive())
+                {
+                    if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &vEnemys[j]->hitRc))
+                    {
+                        switch (vEnemys[i]->GetState())
+                        {
+                            // 위로 이동
+                        case 0:
+                            vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x,float(vEnemys[j]->hitRc.bottom + vEnemys[i]->GetSizeH() / 2) });
+                            break;
+                        case 1:
+                            vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x ,float(vEnemys[j]->hitRc.top - vEnemys[i]->GetSizeH() / 2) });
+                            break;
+                        case 2:
+                            vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.right + vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            break;
+                        case 3:
+                            vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.left - vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            break;
+                        default:
+                            break;
+                        }
+                        vEnemys[i]->SetIsCol(true);
+                    }
+                }
+            }
+        }
     }
 }
 

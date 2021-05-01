@@ -45,7 +45,7 @@ HRESULT BattleScene::Init()
 	//hitBox
 	//playerHitRc = {};
 	
-	HitBox();
+	//HitBox();
 
 	return S_OK;
 }
@@ -177,26 +177,9 @@ void BattleScene::CheckCollision()
 {
 	// 더미 Rc
 	RECT dummyRc = { };
-
+	HitBox();
 	// 적 <-> 적
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (IntersectRect(&dummyRc, &vEnemyHitRc[i], &vEnemyHitRc[j]))
-			{
-				if (i == j) continue;
-				else
-				{
-					//vEnemys[i]->Direction();
-					//vEnemys[j]->Move();
-				}
-			}
-		}
-		
-	}
-
-	// 적 <-> 적
+	enemyMgr->EnemyCollision();
 
 	// 적 <-> 플레이어
 	if (IntersectRect(&dummyRc, &vEnemyHitRc[0], &playerHitRc))
@@ -204,18 +187,16 @@ void BattleScene::CheckCollision()
 		
 	}
 
-
 	// 적 미사일 <-> 플레이어
 
 	// 플레이어 미사일 <-> 적
 
 	// 적 미사일 <-> 플레이어 미사일
 
-	// 적, 플레이어 <-> 벽돌
-
+	// 적 <-> 벽돌
 	for (int j = 0; j < TILE_X * TILE_Y; j++)
 	{
-		HitBox();
+		//HitBox();
 		for (int i = 0; i < 4; i++)
 		{
 			if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &TileInfo[j].rcTile))
@@ -255,6 +236,7 @@ void BattleScene::CheckCollision()
 		}
 	}
 
+	// 플레이어 <-> 벽돌
 	if (playerShip)
 	{
 		if (playerShip->GetIsAlive())
@@ -269,12 +251,10 @@ void BattleScene::CheckCollision()
 						break;
 					case TileType::BUSH:
 						break;
-					
-						
+	
 					case TileType::ICE:
 						break;
 					
-						
 					case TileType::NORMAL:case TileType::RIVER:case TileType::IRON:case TileType::EAGLE:
 						
 						switch (playerShip->GetMoveStat())
@@ -295,36 +275,13 @@ void BattleScene::CheckCollision()
 						case 3:
 							playerShip->SetPos({playerShip->GetPos().x ,float(TileInfo[i].rcTile.top - playerShip->GetSize() / 2 )});
 							break;
-						}
-						
-						
-					
+						}	
 						break;
 					}
 				}
 			}
 		}
 	}
-
-	// 적, 플레이어 <-> 강
-
-	// 적, 플레이어 <-> 강철
-
-	// 적, 플레이어 <-> 숲
-
-	// 적, 플레이어 <-> 얼음
-
-	// 적, 플레이어 미사일 <-> 벽돌
-				   
-	// 적, 플레이어 미사일 <-> 강
-				   
-	// 적, 플레이어 미사일 <-> 강철
-				   
-	// 적, 플레이어 미사일 <-> 숲
-				   
-	// 적, 플레이어 미사일 <-> 얼음
-
-	// 적, 플레이어, 미사일 <-> 수리
 	
 }
 
