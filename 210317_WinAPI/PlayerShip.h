@@ -24,7 +24,7 @@ private:
 
 	//스탯
 	int HP = 1;
-	int size = 64;
+	int size = 48;
 	int missileCount;
 	float moveSpeed;	// 초당 이동거리
 	FPOINT pos;

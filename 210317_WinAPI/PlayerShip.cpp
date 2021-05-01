@@ -10,7 +10,7 @@ HRESULT PlayerShip::Init()
 	if (image == nullptr)
 	{
 		image = ImageManager::GetSingleton()->AddImage("플레이어1탱크",
-			"Image/Player/Player.bmp", maxFrame.x * size, maxFrame.y * size, maxFrame.x, maxFrame.y, true, RGB(255, 0, 255));
+			"Image/Player/Player.bmp", maxFrame.x * TILESIZE*2, maxFrame.y * TILESIZE*2, maxFrame.x, maxFrame.y, true, RGB(255, 0, 255));
 		if (image == nullptr)
 		{
 			MessageBox(g_hWnd, "플레이어1 탱크 이미지 로드 실패", "초기화 실패", MB_OK);
@@ -20,7 +20,7 @@ HRESULT PlayerShip::Init()
 	if (summonImg == nullptr)
 	{
 		summonImg = ImageManager::GetSingleton()->AddImage("summoning",
-			"Image/Effect/Spawn_Effect.bmp", SUMMON_MAX_FRAME * size,size, SUMMON_MAX_FRAME, 1, true, RGB(255, 0, 255));
+			"Image/Effect/Spawn_Effect.bmp", SUMMON_MAX_FRAME * TILESIZE*2, TILESIZE*2, SUMMON_MAX_FRAME, 1, true, RGB(255, 0, 255));
 		if (summonImg == nullptr)
 		{
 			MessageBox(g_hWnd, "플레이어1 탱크 소환 이미지 로드 실패", "초기화 실패", MB_OK);
@@ -39,7 +39,7 @@ HRESULT PlayerShip::Init()
 	pos.x = WINSIZE_X / 2;
 	pos.y = WINSIZE_Y / 2;
 
-	barrelEnd = { pos.x,pos.y - size / 2 };
+	barrelEnd = { pos.x,pos.y - TILESIZE*2 / 2 };
 	barrelAngle = PI / 2;
 	moveSpeed = 150.0f;
 
