@@ -23,12 +23,14 @@ public:
 	void Render(HDC hdc);
 
 	void RegenEnemy();
-	void Dead();
+	void Dead(int index);
 	void EnemyCollision();
 
 	// get, set
 	inline void SetIsEnemyCount(int enemyCount) { this->enemyCount = enemyCount; }
 	inline int GetIsEnemyCount() { return this->enemyCount; }
+	inline void SetRegenEnemyCount(int ememyRegenCount) { this->ememyRegenCount = ememyRegenCount; }
+	inline int GetRegenEnemyCount() { return this->ememyRegenCount; }
 	inline vector<Enemy*> GetEnemys() { return this->vEnemys; }
 	//RECT GetHitRc(int count);
 };

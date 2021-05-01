@@ -5,8 +5,8 @@ HRESULT EnemyManager::Init()
 {
     enemyCount = 20;
     // 적 생성 20마리
-    vEnemys.resize(enemyCount);
-    for (int i = 0; i < enemyCount; i++)
+    vEnemys.resize(4);
+    for (int i = 0; i < 4; i++)
     {
         vEnemys[i] = new Enemy();
         vEnemys[i]->Init(-100, -100);
@@ -69,19 +69,32 @@ void EnemyManager::RegenEnemy()
         regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
         if (regenTimer >= 2.0f)
         {
-            vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
-            vEnemys[iIndex]->SetIsGenEffect(true);
-            vEnemys[iIndex]->SetIsAlive(true);
-            vEnemys[iIndex]->HitBox();
-            // 히트박스 저장
-            //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
-            ememyRegenCount++;
-            posIndex++;
+            if (vEnemys[iIndex]->GetIsAlive() == false)
+            {
+                ememyRegenCount++;
+                vEnemys[iIndex]->Init();
+                vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
+                vEnemys[iIndex]->SetIsGenEffect(true);
+                vEnemys[iIndex]->SetIsAlive(true);
+                vEnemys[iIndex]->HitBox();
+                vEnemys[iIndex]->SetIdIndex(iIndex);
+                posIndex++;
+            }
+
+            else if (vEnemys[iIndex]->GetIsAlive() == true)
+            {
+
+            }
             iIndex++;
             regenTimer = 0.0f;
             if (posIndex == 3)
             {
                 posIndex = 0;
+            }
+
+            if (iIndex > 3)
+            {
+                iIndex = 0;
             }
         }
     }
@@ -92,18 +105,19 @@ void EnemyManager::RegenEnemy()
     }
 }
 
-void EnemyManager::Dead()
+void EnemyManager::Dead(int index)
 {
     enemyCount -= 1;
     ememyRegenCount -= 1;
+    vEnemys[index]->SetIsAlive(false);
 }
 
 void EnemyManager::EnemyCollision()
 {
     RECT dummyRc = { };
-    for (int i = 0; i < enemyCount; i++)
+    for (int i = 0; i < 4 /*enemyCount*/; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4 /*enemyCount*/; j++)
         {
             if (i == j) continue;
             else

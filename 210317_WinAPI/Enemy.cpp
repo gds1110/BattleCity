@@ -42,6 +42,7 @@ HRESULT Enemy::Init(int posX, int posY)
     moveSpeed = 100.0f;
     isAlive = false;
     tempPos = pos;
+    idIndex = 0;
 
     // ¿òÁ÷ÀÓ
     state = 1;
@@ -95,6 +96,9 @@ void Enemy::Render(HDC hdc)
             Rectangle(hdc, hitRc.left, hitRc.top, hitRc.right, hitRc.bottom);
             if (image)  image->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true);
             if (missile)    missile->Render(hdc);
+            char szText[128] = "";
+            wsprintf(szText, "id : %d", idIndex);
+            TextOut(hdc, pos.x, pos.y, szText, strlen(szText));
         }
     }
 }
@@ -181,7 +185,6 @@ void Enemy::Direction()
 void Enemy::Dead()
 {
     isAlive = false;
-    
 }
 
 void Enemy::IsFired()
@@ -247,6 +250,26 @@ void Enemy::CheckCollision()
         }
         isCol = false;
     }
+}
+
+void Enemy::MissileDead()
+{
+    if (missile)
+    {
+        missile->Dead();
+    }
+}
+
+RECT Enemy::GetEnemyMissileRc()
+{
+    if (missile)
+    {
+        if (missile->GetIsFired())
+        {
+            return missile->GetShape();
+        }
+    }
+    return { NULL,NULL ,NULL ,NULL };
 }
 
 
