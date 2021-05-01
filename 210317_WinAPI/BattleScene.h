@@ -21,6 +21,9 @@ private:
 	Image* bin;
 	Image* uiSpace;
 	Image* numImage;
+	Image* gameOver;
+	POINT overPos;
+
 	ItemManager* itemMgr;
 	EnemyManager* enemyMgr;
 	PlayerShip* playerShip;

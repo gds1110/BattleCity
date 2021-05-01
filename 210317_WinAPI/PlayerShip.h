@@ -75,6 +75,7 @@ public:
 	void MissileDead(int index);
 	RECT GetMissileShape(int index);
 
+	inline void SetHp(int hp) { this->HP = hp; }
 	inline int GetHp() { return this->HP; }
 
 	void PlayerSave();

@@ -19,6 +19,7 @@ HRESULT BattleScene::Init()
 
 	playerShip = new PlayerShip();
 	playerShip->Init();
+	playerShip->SetHp(3);
 	if (SceneManager::GetSingleton()->currStage != 1) {
 		playerShip->PlayerLoad();
 	}
@@ -38,11 +39,17 @@ HRESULT BattleScene::Init()
 	sampleTile = ImageManager::GetSingleton()->AddImage(
 		"샘플타일", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
+
+	gameOver = ImageManager::GetSingleton()->AddImage(
+		"게임오버", "Image/Game_Over.bmp", 96,
+		45, true, RGB(255, 0, 255));
+
 	battleUi = new BattleUi();
 	battleUi->Init();
 
 	itemTimer = 0;
 
+	overPos = { (TILE_X * TILESIZE) / 2,TILESIZE * TILE_Y + 100 };
 
 	//vEnemys;
 	
@@ -92,7 +99,10 @@ void BattleScene::Update()
 			//Release();
 			Init();
 	}
-
+	if (KeyManager::GetSingleton()->IsOnceKeyDown('W'))
+	{
+		playerShip->SetHp(playerShip->GetHp() - 1);
+	}
 	if (enemyMgr)
 	{
 		enemyMgr->Update();
@@ -132,7 +142,19 @@ void BattleScene::Update()
 		itemMgr->Update();
 	}
 	
+	
+
 	CheckCollision();
+	
+	if (playerShip->GetHp() < 1)
+	{
+		if (overPos.y > TILESIZE * TILE_Y/2)
+		{
+			overPos.y -= 10;
+		}
+	}
+
+
 }
 
 void BattleScene::Render(HDC hdc)
@@ -192,6 +214,11 @@ void BattleScene::Render(HDC hdc)
 	{
 		battleUi->Render2(hdc,playerShip->GetHp(),enemyMgr->GetIsEnemyCount());
 	}
+
+	
+		gameOver->Render(hdc, overPos.x, overPos.y, true);
+	
+
 }
 
 void BattleScene::StageLoad(int stageNum)
