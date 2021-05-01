@@ -18,7 +18,7 @@ HRESULT BattleScene::Init()
 
 	StageLoad(SceneManager::currStage);
 
-		playerShip = new PlayerShip();
+	playerShip = new PlayerShip();
 	if (SceneManager::GetSingleton()->currStage == 1) {
 		playerShip->Init();
 	}
