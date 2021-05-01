@@ -134,7 +134,7 @@ void PlayerShip::Update()
 					barrelAngle = 0;
 				}
 			}
-			if (KeyManager::GetSingleton()->IsStayKeyDown(VK_SPACE))
+			if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_SPACE))
 			{
 				Fire();
 			}

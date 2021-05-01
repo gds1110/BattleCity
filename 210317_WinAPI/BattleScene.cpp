@@ -324,7 +324,27 @@ void BattleScene::CheckCollision()
 			
 		}
 	}
-	
+	MissileRC = playerShip->GetMissileShape(0);
+	for (int i = 0; i < sizeof(TileInfo) / sizeof(TILE_INFO); i++)
+	{
+		if (IntersectRect(&dummyRc, &MissileRC, &(TileInfo[i].rcTile)))
+		{
+			switch (TileInfo[i].tileType)
+			{
+			case TileType::BLACK:case TileType::BUSH:case TileType::ICE:case TileType::RIVER:
+				break;
+			case TileType::IRON:case TileType::EAGLE:
+				playerShip->MissileDead(0);
+				break;
+
+			case TileType::NORMAL:
+				TileInfo[i].tileType = TileType::BLACK;
+				TileInfo[i].frameY = 13;
+				playerShip->MissileDead(0);
+				break;
+			}
+		}
+	}
 	
 
 	

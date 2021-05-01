@@ -92,10 +92,7 @@ void Missile::Update()
 			
 			if (!isDying)
 			{
-				isDying = true;
-				exlposionTimer = 0.0f;
-				explosionFrame = 0;
-				explosionPos = { (long)pos.x,(long)pos.y };
+				Dead();
 			}
 			isFired = false;
 
@@ -214,4 +211,5 @@ void Missile::Dead(void)
 	isFired = false;
 	exlposionTimer = 0.0f;
 	explosionFrame = 0;
+	explosionPos = { (long)pos.x,(long)pos.y };
 }
