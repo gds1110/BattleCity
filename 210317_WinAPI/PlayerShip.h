@@ -24,7 +24,7 @@ private:
 
 	//스탯
 	int HP = 1;
-	int size = 64;
+	int size = 48;
 	int missileCount;
 	float moveSpeed;	// 초당 이동거리
 	FPOINT pos;
@@ -72,6 +72,7 @@ public:
 	inline bool GetIsAlive(void) { return this->isAlive; }
 	inline int GetMoveStat(void) { return this->outputMove; }
 	inline int GetSize(void) { return this->size; }
+	void MissileDead(int index);
 	RECT GetMissileShape(int index);
 };
 

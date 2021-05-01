@@ -196,7 +196,7 @@ void BattleScene::CheckCollision()
 	// 더미 Rc
 	RECT dummyRc = { };
 	HitBox();
-	// 적 <-> 적
+	// // 적 <-> 적
 	enemyMgr->EnemyCollision();
 
 	// 적 <-> 플레이어
@@ -211,11 +211,11 @@ void BattleScene::CheckCollision()
 
 	// 적 미사일 <-> 플레이어 미사일
 
-	// 적 <-> 벽돌
+	//적<->타일
 	for (int j = 0; j < TILE_X * TILE_Y; j++)
 	{
 		//HitBox();
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
 		{
 			if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &TileInfo[j].rcTile))
 			{
@@ -253,8 +253,7 @@ void BattleScene::CheckCollision()
 
 		}
 	}
-
-	// 플레이어 <-> 벽돌
+	//플레이어<->타일
 	if (playerShip)
 	{
 		if (playerShip->GetIsAlive())
@@ -285,7 +284,7 @@ void BattleScene::CheckCollision()
 						case 1:
 							playerShip->SetPos({  playerShip->GetPos().x,float(TileInfo[i].rcTile.bottom + playerShip->GetSize() / 2)});
 							break;
-							//플레이어가 왼쪽에서
+							//플레이어가 위쪽에서
 						case 2:
 							playerShip->SetPos({ float(TileInfo[i].rcTile.left - playerShip->GetSize()/2 ),playerShip->GetPos().y });
 							break;
@@ -300,6 +299,62 @@ void BattleScene::CheckCollision()
 			}
 		}
 	}
+	RECT MissileRC = {};
+	MissileRC = playerShip->GetMissileShape(0);
+	//플레이어미사일<->적
+	if (enemyMgr)
+	{
+		for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
+		{
+			if (vEnemys[i]->GetIsAlive()) 
+			{
+				if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &MissileRC))
+				{
+					playerShip->MissileDead(0);
+					vEnemys[i]->Dead();
+					enemyMgr->Dead();
+				}
+				
+			}
+			
+		}
+	}
+	MissileRC = playerShip->GetMissileShape(0);
+	for (int i = 0; i < sizeof(TileInfo) / sizeof(TILE_INFO); i++)
+	{
+		if (IntersectRect(&dummyRc, &MissileRC, &(TileInfo[i].rcTile)))
+		{
+			switch (TileInfo[i].tileType)
+			{
+			case TileType::BLACK:case TileType::BUSH:case TileType::ICE:case TileType::RIVER:
+				break;
+			case TileType::IRON:case TileType::EAGLE:
+				playerShip->MissileDead(0);
+				break;
+
+			case TileType::NORMAL:
+				TileInfo[i].tileType = TileType::BLACK;
+				TileInfo[i].frameY = 13;
+				playerShip->MissileDead(0);
+				break;
+			}
+		}
+	}
+	
+
+	
+	
+	// 적, 플레이어 미사일 <-> 벽돌
+				   
+	// 적, 플레이어 미사일 <-> 강
+				   
+	// 적, 플레이어 미사일 <-> 강철
+				   
+	// 적, 플레이어 미사일 <-> 숲
+				   
+	// 적, 플레이어 미사일 <-> 얼음
+
+	// 적, 플레이어, 미사일 <-> 수리
 	
 }
 

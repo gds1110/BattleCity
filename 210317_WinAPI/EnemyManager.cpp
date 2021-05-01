@@ -86,7 +86,7 @@ void EnemyManager::RegenEnemy()
         }
     }
 
-    if (iIndex < enemyCount)
+    if (0 >= enemyCount)
     {
         regenEnemy = false;
     }
