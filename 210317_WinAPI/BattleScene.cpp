@@ -152,6 +152,13 @@ void BattleScene::Update()
 		{
 			overPos.y -= 10;
 		}
+		if (overPos.y <= TILESIZE * TILE_Y / 2)
+		{
+			if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_SPACE))
+			{
+				SceneManager::GetSingleton()->ChangeScene("½ºÄÚ¾î");
+			}
+		}
 	}
 
 
