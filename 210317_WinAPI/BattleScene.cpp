@@ -24,8 +24,10 @@ HRESULT BattleScene::Init()
 	}
 	else
 	{
+		//playerShip->PlayerLoad();
+
 		playerShip->Init();
-		//Load();
+		playerShip->PlayerLoad();
 	}
 
 	bin = new Image();
@@ -85,8 +87,8 @@ void BattleScene::Update()
 	{
 		if (SceneManager::currStage < 3)
 		{
-			playerShip->SetPos({ 100,100 });
-			Save();
+			//playerShip->SetPos({ 100,100 });
+			playerShip->PlayerSave();
 			SceneManager::GetSingleton()->currStage += 1;
 			SceneManager::GetSingleton()->ChangeScene("로딩씬");
 		}
@@ -402,29 +404,4 @@ void BattleScene::ItemSkill(int a)
 
 }
 
-void BattleScene::Save(void)
-{
-	string fileName = "Player/playerData";
-	fileName += ".Player";
-	DWORD writtenBytes;
-	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	WriteFile(hFile, playerShip, sizeof(PlayerShip), &writtenBytes, NULL);
-	CloseHandle(hFile);
-}
 
-void BattleScene::Load(void)
-{
-	string fileName = "Player/playerData";
-	fileName += ".Player";
-	DWORD readBytes;
-	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (ReadFile(hFile, playerShip, sizeof(PlayerShip), &readBytes, NULL))
-	{
-
-	}
-	else
-	{
-		MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
-	}
-	CloseHandle(hFile);
-}
