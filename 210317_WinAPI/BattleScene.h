@@ -49,7 +49,6 @@ public:
 
 	void ItemSkill(int a);
 
-	void Save(void);
-	void Load(void);
+
 };
 

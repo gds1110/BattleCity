@@ -263,8 +263,10 @@ void PlayerShip::Render(HDC hdc)
 	
 	if (missile) 
 	{
+		
 		for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
 		{
+			if(SUCCEEDED(missile[i].Init()))
 			missile[i].Render(hdc);
 		}
 	}
@@ -299,6 +301,31 @@ RECT PlayerShip::GetMissileShape(int index)
 		}
 	}
 	return {NULL,NULL ,NULL ,NULL };
+}
+void PlayerShip::PlayerSave()
+{
+	string fileName = "Player/playerData";
+	fileName += ".Player";
+	DWORD writtenBytes;
+	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	WriteFile(hFile, &pos, sizeof(FPOINT), &writtenBytes, NULL);
+	CloseHandle(hFile);
+}
+void PlayerShip::PlayerLoad()
+{
+	string fileName = "Player/playerData";
+	fileName += ".Player";
+	DWORD readBytes;
+	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (ReadFile(hFile, &pos, sizeof(FPOINT), &readBytes, NULL))
+	{
+		SetPos(pos);
+	}
+	else
+	{
+		MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
+	}
+	CloseHandle(hFile);
 }
 void PlayerShip::Fire()
 {

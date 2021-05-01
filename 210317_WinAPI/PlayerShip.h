@@ -73,5 +73,8 @@ public:
 	inline int GetMoveStat(void) { return this->outputMove; }
 	inline int GetSize(void) { return this->size; }
 	RECT GetMissileShape(int index);
+
+	void PlayerSave();
+	void PlayerLoad();
 };
 
