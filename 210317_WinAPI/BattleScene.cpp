@@ -398,7 +398,25 @@ void BattleScene::CheckCollision()
 	// 적, 플레이어 미사일 <-> 얼음
 
 	// 적, 플레이어, 미사일 <-> 수리
-	
+	RECT itemdummy = {};
+	RECT itemRC = {};
+	// 플레이어 <-> 아이템
+	if (itemMgr)
+	{
+		for (int i = 0; i < itemMgr->GetItem().size(); i++)
+		{
+			if (itemMgr->GetItem()[i]->GetDrop() == true)
+			{
+				itemRC = itemMgr->GetItem()[i]->GetRc();
+				if (IntersectRect(&itemdummy,&playerHitRc, &itemRC))
+				{
+					itemMgr->GetItem()[i]->SetPos({ -200,-200 });
+					itemMgr->GetItem()[i]->SetDrop(false);
+				}
+			}
+		}
+	}
+
 }
 
 void BattleScene::HitBox()
