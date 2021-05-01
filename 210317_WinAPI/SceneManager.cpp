@@ -79,6 +79,7 @@ HRESULT SceneManager::ChangeScene(string key)
 
     if (it->second == currentScene)
     {
+        it->second->Release();
         it->second->Init();
         return S_OK;
     }
@@ -92,7 +93,7 @@ HRESULT SceneManager::ChangeScene(string key)
             currentScene->Release();
         }
         currentScene = it->second;
-       // it->second->Init();
+        //it->second->Init();
 
         return S_OK;
     }

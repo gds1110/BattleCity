@@ -26,6 +26,8 @@ private:
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
 
+	bool gameOn;
+
 	float itemTimer;
 
 	Item* item;

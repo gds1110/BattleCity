@@ -16,20 +16,13 @@ HRESULT BattleScene::Init()
 
 	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
 
-	StageLoad(SceneManager::currStage);
 
 	playerShip = new PlayerShip();
-	if (SceneManager::GetSingleton()->currStage == 1) {
-		playerShip->Init();
-	}
-	else
-	{
-		//playerShip->PlayerLoad();
-
-		playerShip->Init();
+	playerShip->Init();
+	if (SceneManager::GetSingleton()->currStage != 1) {
 		playerShip->PlayerLoad();
 	}
-
+	
 	bin = new Image();
 	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);
 
@@ -37,6 +30,7 @@ HRESULT BattleScene::Init()
 	enemyMgr = new EnemyManager();
 	enemyMgr->Init();
 
+	gameOn = true;
 
 	itemMgr = new ItemManager();
 	itemMgr->Init();
@@ -56,6 +50,7 @@ HRESULT BattleScene::Init()
 	//playerHitRc = {};
 	
 	HitBox();
+	StageLoad(SceneManager::currStage);
 
 	return S_OK;
 }
@@ -73,6 +68,7 @@ void BattleScene::Update()
 	itemTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	int random;
 	int typeRandom;
+
 	if (itemTimer > 3.0f)
 	{
 		random = rand()% (TILE_X * TILE_Y);
@@ -90,13 +86,35 @@ void BattleScene::Update()
 			//playerShip->SetPos({ 100,100 });
 			playerShip->PlayerSave();
 			SceneManager::GetSingleton()->currStage += 1;
-			SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+
 		}
+			SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+			//Release();
+			Init();
 	}
 
 	if (enemyMgr)
 	{
 		enemyMgr->Update();
+		//if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN)) {
+		//	/*enemyMgr->miE1();
+		//	enemyMgr->miE2();*/
+
+		//	if (SceneManager::currStage < 3)
+		//	{
+		//		SceneManager::GetSingleton()->currStage += 1;
+		//	}
+		//	SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+		//}
+
+		//if (enemyMgr->GetIsEnemyCount() <= 0 && enemyMgr->GetRegenEnemyCount() <= 0)
+		//{
+		//	if (SceneManager::currStage < 3)
+		//	{
+		//		SceneManager::GetSingleton()->currStage += 1;
+		//	}
+		//	SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+		//}
 	}
 	
 
@@ -172,7 +190,7 @@ void BattleScene::Render(HDC hdc)
 	}
 	if (battleUi)
 	{
-		battleUi->Render(hdc);
+		battleUi->Render2(hdc,playerShip->GetHp(),enemyMgr->GetIsEnemyCount());
 	}
 }
 
