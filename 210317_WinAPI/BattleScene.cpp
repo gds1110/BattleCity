@@ -15,8 +15,8 @@ HRESULT BattleScene::Init()
 {
 
 	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
-
-	StageLoad(SceneManager::currStage);
+	//SceneManager::currStage
+	StageLoad(3);
 
 		playerShip = new PlayerShip();
 	if (SceneManager::GetSingleton()->currStage == 1) {

@@ -117,20 +117,24 @@ void EnemyManager::EnemyCollision()
                             // 위로 이동
                         case 0:
                             vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x,float(vEnemys[j]->hitRc.bottom + vEnemys[i]->GetSizeH() / 2) });
+                            vEnemys[i]->SetState(1);
                             break;
                         case 1:
                             vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x ,float(vEnemys[j]->hitRc.top - vEnemys[i]->GetSizeH() / 2) });
+                            vEnemys[i]->SetState(0);
                             break;
                         case 2:
                             vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.right + vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            vEnemys[i]->SetState(3);
                             break;
                         case 3:
                             vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.left - vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            vEnemys[i]->SetState(2);
                             break;
                         default:
                             break;
                         }
-                        vEnemys[i]->SetIsCol(true);
+                        //vEnemys[i]->SetIsCol(true);
                     }
                 }
             }
