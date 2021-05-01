@@ -119,43 +119,45 @@ void Missile::Update()
 
 void Missile::Render(HDC hdc)
 {
-	if (isFired)
-	{
-		//미사일이 오른쪽을 볼때
-		if ((angle>=-PI/4)&& (angle < PI / 4))
+	if ((imgLeft != nullptr) && (imgRight != nullptr) && (imgUp != nullptr) && (imgDown != nullptr)) {
+		if (isFired)
 		{
-			imgRight->Render(hdc, pos.x, pos.y, true);
+			//미사일이 오른쪽을 볼때
+			if ((angle >= -PI / 4) && (angle < PI / 4))
+			{
+				imgRight->Render(hdc, pos.x, pos.y, true);
+			}
+			//미사일이 위을 볼때
+			if ((angle >= PI / 4) && (angle < PI * 3 / 4))
+			{
+				imgUp->Render(hdc, pos.x, pos.y, true);
+			}
+			//미사일이 왼쪽을 볼때
+			if ((angle >= PI * 3 / 4) || (angle < -PI * 3 / 4))
+			{
+				imgLeft->Render(hdc, pos.x, pos.y, true);
+			}
+			//미사일이 아래을 볼때
+			if ((angle < -PI / 4) && (angle >= -PI * 3 / 4))
+			{
+				imgDown->Render(hdc, pos.x, pos.y, true);
+			}
+
+			//Ellipse(hdc, shape.left, shape.top, shape.right, shape.bottom);
 		}
-		//미사일이 위을 볼때
-		if ((angle >= PI / 4) && (angle < PI *3/ 4))
+		if (isDying)
 		{
-			imgUp->Render(hdc, pos.x, pos.y, true);
+
+			if (explosionFrame >= EXPLOSION_MAX_FRAME)
+			{
+				isDying = false;
+			}
+			else {
+				imgExplosion->FrameRender(hdc, explosionPos.x, explosionPos.y, explosionFrame, 0, true);
+			}
+
+
 		}
-		//미사일이 왼쪽을 볼때
-		if ((angle >= PI *3/ 4) || (angle < -PI *3/ 4))
-		{
-			imgLeft->Render(hdc, pos.x, pos.y, true);
-		}
-		//미사일이 아래을 볼때
-		if ((angle < -PI / 4) && (angle >= -PI*3 / 4))
-		{
-			imgDown->Render(hdc, pos.x, pos.y, true);
-		}
-		
-		//Ellipse(hdc, shape.left, shape.top, shape.right, shape.bottom);
-	}
-	if (isDying)
-	{
-		
-		if (explosionFrame>=EXPLOSION_MAX_FRAME)
-		{
-			isDying = false;
-		}
-		else {
-			imgExplosion->FrameRender(hdc, explosionPos.x, explosionPos.y, explosionFrame, 0, true);
-		}
-		
-		
 	}
 }
 

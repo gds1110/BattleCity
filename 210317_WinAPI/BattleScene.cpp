@@ -16,6 +16,18 @@ HRESULT BattleScene::Init()
 
 	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
 
+	StageLoad(SceneManager::currStage);
+
+		playerShip = new PlayerShip();
+	if (SceneManager::GetSingleton()->currStage == 1) {
+		playerShip->Init();
+	}
+	else
+	{
+		playerShip->Init();
+		//Load();
+	}
+
 	bin = new Image();
 	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);
 
@@ -23,8 +35,6 @@ HRESULT BattleScene::Init()
 	enemyMgr = new EnemyManager();
 	enemyMgr->Init();
 
-	playerShip = new PlayerShip();
-	playerShip->Init();
 
 	itemMgr = new ItemManager();
 	itemMgr->Init();
@@ -32,14 +42,12 @@ HRESULT BattleScene::Init()
 	sampleTile = ImageManager::GetSingleton()->AddImage(
 		"샘플타일", "Image/SamlpTile_2.bmp", SAMPLE_TILE_X * TILESIZE, SAMPLE_TILE_Y * TILESIZE,
 		SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(0, 0, 0));
-
-
 	battleUi = new BattleUi();
 	battleUi->Init();
 
 	itemTimer = 0;
 
-	StageLoad(2);
+
 	//vEnemys;
 	
 	//hitBox
@@ -71,6 +79,16 @@ void BattleScene::Update()
 		{
 			itemMgr->DropItem({ TileInfo[random].rcTile.left+(TILESIZE/2),TileInfo[random].rcTile.top+ (TILESIZE / 2) }, typeRandom);
 			itemTimer = 0;
+		}
+	}
+	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+	{
+		if (SceneManager::currStage < 3)
+		{
+			playerShip->SetPos({ 100,100 });
+			Save();
+			SceneManager::GetSingleton()->currStage += 1;
+			SceneManager::GetSingleton()->ChangeScene("로딩씬");
 		}
 	}
 
@@ -366,17 +384,47 @@ void BattleScene::CheckCollision()
 void BattleScene::HitBox()
 {
 	// 플레이어 RECT
-	playerHitRc = playerShip->GetShape();
-
+	if (playerShip) {
+		playerHitRc = playerShip->GetShape();
+	}
 	// enemy RECT
-	vEnemys = enemyMgr->GetEnemys();
-	for (int i = 0; i < 20; i++)
-	{
-		vEnemyHitRc.push_back(vEnemys[i]->hitRc);
+	if (enemyMgr) {
+		vEnemys = enemyMgr->GetEnemys();
+		for (int i = 0; i < 4; i++)
+		{
+			vEnemyHitRc.push_back(vEnemys[i]->hitRc);
+		}
 	}
 }
 
 void BattleScene::ItemSkill(int a)
 {
 
+}
+
+void BattleScene::Save(void)
+{
+	string fileName = "Player/playerData";
+	fileName += ".Player";
+	DWORD writtenBytes;
+	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	WriteFile(hFile, playerShip, sizeof(PlayerShip), &writtenBytes, NULL);
+	CloseHandle(hFile);
+}
+
+void BattleScene::Load(void)
+{
+	string fileName = "Player/playerData";
+	fileName += ".Player";
+	DWORD readBytes;
+	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (ReadFile(hFile, playerShip, sizeof(PlayerShip), &readBytes, NULL))
+	{
+
+	}
+	else
+	{
+		MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
+	}
+	CloseHandle(hFile);
 }
