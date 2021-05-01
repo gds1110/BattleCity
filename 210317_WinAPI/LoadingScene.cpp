@@ -59,6 +59,8 @@ void LoadingScene::Update()
 	{
 		time += ElapsedT;
 		if (time > 1.5f) {
+			onStage = false;
+			time = 0;
 			SceneManager::GetSingleton()->ChangeScene("ÀüÅõ_1");
 		}
 	}
@@ -75,8 +77,8 @@ void LoadingScene::Render(HDC hdc)
 		balckNum->FrameRender(hdc,
 			605,
 			410,
-			1 % 5,
-			1 / 5,
+			SceneManager::GetSingleton()->currStage % 5,
+			SceneManager::GetSingleton()->currStage / 5,
 			true);
 	}
 
