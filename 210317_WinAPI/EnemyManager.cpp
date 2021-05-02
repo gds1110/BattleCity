@@ -108,6 +108,7 @@ void EnemyManager::RegenEnemy()
     }
 }
 
+
 void EnemyManager::Dead(int index)
 {
     enemyCount -= 1;
