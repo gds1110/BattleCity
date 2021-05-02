@@ -33,5 +33,8 @@ public:
 	inline int GetRegenEnemyCount() { return this->ememyRegenCount; }
 	inline vector<Enemy*> GetEnemys() { return this->vEnemys; }
 	//RECT GetHitRc(int count);
+	inline int GetRegenEnemyCount() { return this->ememyRegenCount; }
+	inline void miE1() { if (enemyCount > 0)enemyCount--; }
+	inline void miE2() { if (ememyRegenCount > 0)ememyRegenCount--; }
 };
 

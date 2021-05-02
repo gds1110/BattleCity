@@ -79,6 +79,9 @@ void EnemyManager::RegenEnemy()
                 vEnemys[iIndex]->HitBox();
                 vEnemys[iIndex]->SetIdIndex(iIndex);
                 posIndex++;
+                /*if (enemyCount > 0) {
+                    enemyCount--;
+                }*/
             }
 
             else if (vEnemys[iIndex]->GetIsAlive() == true)
@@ -128,7 +131,6 @@ void EnemyManager::EnemyCollision()
                     {
                         switch (vEnemys[i]->GetState())
                         {
-                            // 위로 이동
                         case 0:
                             vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x,float(vEnemys[j]->hitRc.bottom + vEnemys[i]->GetSizeH() / 2) });
                             vEnemys[i]->SetState(1);

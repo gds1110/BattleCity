@@ -62,7 +62,17 @@ void MainGame::Release()
 
 void MainGame::Update()
 {
+	//if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+	//{
+	//	if (SceneManager::currStage < 3)
+	//	{
+	//		//playerShip->SetPos({ 100,100 });
+	//		//playerShip->PlayerSave();
+	//		SceneManager::GetSingleton()->currStage += 1;
 
+	//	}
+	//	SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+	//}
 	SceneManager::GetSingleton()->Update();
 }
 

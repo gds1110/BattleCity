@@ -26,6 +26,8 @@ private:
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
 
+	bool gameOn;
+
 	float itemTimer;
 
 	Item* item;
@@ -52,7 +54,6 @@ public:
 
 	void ItemSkill(int a);
 
-	void Save(void);
-	void Load(void);
+
 };
 

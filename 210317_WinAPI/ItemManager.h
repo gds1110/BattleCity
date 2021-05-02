@@ -17,6 +17,8 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
+	inline vector<Item*> GetItem() { return vItems; }
+
 	void DropItem(POINT pos,int type);
 };
 

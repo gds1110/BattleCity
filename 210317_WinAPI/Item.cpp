@@ -1,5 +1,6 @@
 #include "Item.h"
 #include "Image.h"
+#include "config.h"
 
 HRESULT Item::Init()
 {
@@ -18,10 +19,24 @@ void Item::Release()
 
 void Item::Update()
 {
+    if (isDrop == true) {
+        SetRC(pos);
+    }
+
 }
 
 void Item::Render(HDC hdc)
 {
     //itemImg->Render(hdc,500,500);
-    itemImg->FrameRender(hdc, pos.x, pos.y, itemType % 7, 0, true);
+   //  Rectangle(hdc, itemRc.left, itemRc.top, itemRc.right, itemRc.bottom);
+     itemImg->FrameRender(hdc, pos.x, pos.y, itemType % 7, 0, true);
+}
+
+ void Item::SetRC(POINT pos)
+{
+    SetRect(&itemRc,  pos.x - itemImg->GetFrameWidth()/2+10,
+        pos.y - itemImg->GetFrameHeight()/2+10,
+        pos.x + itemImg->GetFrameWidth()/2-10,
+        pos.y + itemImg->GetFrameHeight()/2-10);
+
 }

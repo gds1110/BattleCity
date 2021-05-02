@@ -74,5 +74,10 @@ public:
 	inline int GetSize(void) { return this->size; }
 	void MissileDead(int index);
 	RECT GetMissileShape(int index);
+
+	inline int GetHp() { return this->HP; }
+
+	void PlayerSave();
+	void PlayerLoad();
 };
 

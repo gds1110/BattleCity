@@ -21,12 +21,16 @@ private:
 	int itemType;
 	POINT pos;
 	bool isDrop;
+	RECT itemRc;
 
 public:
 	HRESULT Init();
 	void Release();
 	void Update();
 	void Render(HDC hdc);
+
+	void SetRC(POINT pos);
+	RECT GetRc() { return this->itemRc; }
 
 	inline void SetType(int type) { this->itemType = type; }
 	inline int GetType() { return this->itemType; }
