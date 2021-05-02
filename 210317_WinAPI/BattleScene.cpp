@@ -81,7 +81,7 @@ void BattleScene::Update()
 	int random;
 	int typeRandom;
 
-	if (itemTimer > 3.0f)
+	if (itemTimer > 10.0f)
 	{
 		random = rand() % (TILE_X * TILE_Y);
 		typeRandom = rand() % 8;
@@ -115,25 +115,7 @@ void BattleScene::Update()
 			prevEnPos[i] = enemyMgr->GetEnemys()[i]->GetPos();
 		}
 		enemyMgr->Update();
-		//if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN)) {
-		//	/*enemyMgr->miE1();
-		//	enemyMgr->miE2();*/
 
-		//	if (SceneManager::currStage < 3)
-		//	{
-		//		SceneManager::GetSingleton()->currStage += 1;
-		//	}
-		//	SceneManager::GetSingleton()->ChangeScene("로딩씬");
-		//}
-
-		//if (enemyMgr->GetIsEnemyCount() <= 0 && enemyMgr->GetRegenEnemyCount() <= 0)
-		//{
-		//	if (SceneManager::currStage < 3)
-		//	{
-		//		SceneManager::GetSingleton()->currStage += 1;
-		//	}
-		//	SceneManager::GetSingleton()->ChangeScene("로딩씬");
-		//}
 	}
 	
 
@@ -300,6 +282,20 @@ void BattleScene::CheckCollision()
 
 
 	// 적 미사일 <-> 플레이어
+	for (int i = 0; i < enemyMgr->GetRegenEnemyCount(); i++)
+	{
+		if (vEnemys[i]->GetIsAlive())
+		{
+			if (IntersectRect(&dummyRc, &enemyMissileRc[i], &playerHitRc))
+			{
+				//playerShip->MissileDead(0);
+			
+				vEnemys[i]->MissileDead();
+				break;
+			}
+		}
+	}
+
 
 	// 적 <-> 타일
 	for (int j = 0; j < TILE_X * TILE_Y; j++)

@@ -79,9 +79,9 @@ void EnemyManager::RegenEnemy()
                 vEnemys[iIndex]->HitBox();
                 vEnemys[iIndex]->SetIdIndex(iIndex);
                 posIndex++;
-                /*if (enemyCount > 0) {
+                if (enemyCount > 0) {
                     enemyCount--;
-                }*/
+                }
             }
 
             else if (vEnemys[iIndex]->GetIsAlive() == true)
@@ -102,7 +102,7 @@ void EnemyManager::RegenEnemy()
         }
     }
 
-    if (0 >= enemyCount)
+    if (enemyCount<1)
     {
         regenEnemy = false;
     }
