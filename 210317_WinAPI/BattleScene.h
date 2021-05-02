@@ -39,6 +39,9 @@ private:
 	vector<RECT> vEnemyHitRc;
 	vector<Enemy*> vEnemys;
 	RECT playerHitRc;
+	vector<RECT> enemyMissileRc;
+	bool initCheck;
+	int enemyFieldcount;
 
 public:
 	virtual HRESULT Init();
