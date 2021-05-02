@@ -21,6 +21,7 @@ HRESULT EnemyManager::Init()
     regenTimer = 0.0f;
     iIndex = 0;
     regenEnemy = true;
+    maxFieldCount = 4;
     return S_OK;
 }
 
@@ -39,9 +40,9 @@ void EnemyManager::Release()
 
 void EnemyManager::Update()
 {
-    if (enemyCount > 0) {
+    if(enemyCount >= maxFieldCount - 1)
         RegenEnemy();
-    }
+
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
@@ -61,13 +62,18 @@ void EnemyManager::Render(HDC hdc)
 
 void EnemyManager::RegenEnemy()
 {
-    if (ememyRegenCount >= 4)
+    if (ememyRegenCount >= maxFieldCount)
     {
         regenEnemy = false;
     }
-    else if (ememyRegenCount <= 3)
+    else if (ememyRegenCount < maxFieldCount)
     {
         regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
+        //if (vEnemys[iIndex]->GetIsAlive() == true)
+        //{
+        //    iIndex++;
+        //}
+
         if (regenTimer >= 2.0f)
         {
             if (vEnemys[iIndex]->GetIsAlive() == false)
@@ -84,11 +90,6 @@ void EnemyManager::RegenEnemy()
                     enemyCount--;
                 }
             }
-
-            else if (vEnemys[iIndex]->GetIsAlive() == true)
-            {
-
-            }
             iIndex++;
             regenTimer = 0.0f;
             if (posIndex == 3)
@@ -102,11 +103,6 @@ void EnemyManager::RegenEnemy()
             }
         }
     }
-
-    if (enemyCount<1)
-    {
-        regenEnemy = false;
-    }
 }
 
 
@@ -114,7 +110,8 @@ void EnemyManager::Dead(int index)
 {
     enemyCount -= 1;
     ememyRegenCount -= 1;
-    vEnemys[index]->SetIsAlive(false);
+    //vEnemys[index]->SetIsAlive(false);
+
 }
 
 void EnemyManager::EnemyCollision()

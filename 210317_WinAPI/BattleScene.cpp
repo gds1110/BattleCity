@@ -258,27 +258,27 @@ void BattleScene::CheckCollision()
 					if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &playerHitRc))
 					{
 						//플레이어가 왼쪽
-						if ((dummyRc.left > playerShip->GetPos().x)||(dummyRc.right < playerShip->GetPos().x))
+						if ((dummyRc.left > playerShip->GetPos().x) || (dummyRc.right < playerShip->GetPos().x))
 						{
 							playerShip->SetPos({ prevPlPos.x,playerShip->GetPos().y });
 							vEnemys[i]->SetPos({ prevEnPos[i].x,vEnemys[i]->GetPos().y });
 						}
-						
+
 						//플레이어가 위
-						if ((dummyRc.top > playerShip->GetPos().y)|| (dummyRc.bottom < playerShip->GetPos().y))
+						if ((dummyRc.top > playerShip->GetPos().y) || (dummyRc.bottom < playerShip->GetPos().y))
 						{
 							playerShip->SetPos({ playerShip->GetPos().x, prevPlPos.y });
 							vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x, prevEnPos[i].y });
 						}
-						
+
 
 					}
 				}
-				
+
 			}
 		}
 	}
-	
+
 
 
 	// 적 미사일 <-> 플레이어
@@ -301,8 +301,10 @@ void BattleScene::CheckCollision()
 	for (int j = 0; j < TILE_X * TILE_Y; j++)
 	{
 		//HitBox();
-		for (int i = 0; i < enemyMgr->GetRegenEnemyCount(); i++)
+		for (int i = 0; i < 4; i++)
 		{
+			//map<int, RECT>::iterator it;
+			//it = mEnemyHitRc.find(i);
 			if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &TileInfo[j].rcTile))
 			{
 				switch (TileInfo[j].tileType)
@@ -391,15 +393,17 @@ void BattleScene::CheckCollision()
 	// 플레이어 미사일 <-> 적
 	if (enemyMgr)
 	{
-		for (int i = 0; i < enemyFieldcount; i++)
+		for (int i = 0; i < 4; i++)
 		{
+			map<int, RECT>::iterator it;
+			it = mEnemyHitRc.find(i);
 			if (vEnemys[i]->GetIsAlive())
 			{
-				if (IntersectRect(&dummyRc, &vEnemyHitRc[i], &MissileRC))
+				if (IntersectRect(&dummyRc, &(it->second), &MissileRC))
 				{
 					playerShip->MissileDead(0);
 					//vEnemyHitRc.erase(vEnemyHitRc.begin() + i);
-					//vEnemys[i]->Dead();
+					vEnemys[i]->Dead();
 					enemyMgr->Dead(i);
 					//enemyMgr->SetRegenEnemyCount(enemyFieldcount - 1);
 					break;
@@ -517,7 +521,8 @@ void BattleScene::HitBox()
 	if (enemyMgr) {
 		if (initCheck)
 		{
-			vEnemyHitRc.clear();
+			//vEnemyHitRc.clear();
+			mEnemyHitRc.clear();
 			enemyMissileRc.clear();
 		}
 		else {} 
@@ -525,19 +530,25 @@ void BattleScene::HitBox()
 		vEnemys = enemyMgr->GetEnemys();
 		if (enemyMgr->GetRegenEnemyCount() >= 1)
 		{
-			for (int i = 0; i < enemyMgr->GetRegenEnemyCount(); i++)
+			for (int i = 0; i < 4; i++)
 			{
-				//if (vEnemys[i]->GetIsAlive())
-				//{
-					vEnemyHitRc.push_back(vEnemys[i]->GetHitRc());
+				if (enemyMgr->GetRegenEnemyCount() >= i)
+				{
+					//vEnemyHitRc.push_back(vEnemys[i]->GetHitRc());
+					mEnemyHitRc.insert(pair<int, RECT>(vEnemys[i]->GetIdIndex(), vEnemys[i]->GetHitRc()));
 					enemyMissileRc.push_back(vEnemys[i]->GetEnemyMissileRc());
-				//}
+				}
+				else
+				{
+					mEnemyHitRc.insert(pair<int, RECT>(vEnemys[i]->GetIdIndex(), { 0, 0, 0,0 }));
+				}
 			}
 		}
 
 		else
 		{
-			vEnemyHitRc.push_back({ 0, 0, 0, 0 }); 
+			//vEnemyHitRc.push_back({ 0, 0, 0, 0 }); 
+			mEnemyHitRc.insert(pair<int, RECT>(5, { 0, 0, 0, 0 }));
 			enemyMissileRc.push_back({ 0, 0, 0, 0 });
 		}
 	}
