@@ -22,9 +22,9 @@ HRESULT BattleScene::Init()
 	playerShip = new PlayerShip();
 	playerShip->Init();
 	playerShip->SetHp(3);
-	if (SceneManager::GetSingleton()->currStage != 1) {
-		playerShip->PlayerLoad();
-	}
+	//if (SceneManager::GetSingleton()->currStage != 1) {
+	//	playerShip->PlayerLoad();
+	//}
 	
 	bin = new Image();
 	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);

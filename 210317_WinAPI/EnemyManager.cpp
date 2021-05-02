@@ -39,8 +39,9 @@ void EnemyManager::Release()
 
 void EnemyManager::Update()
 {
-    RegenEnemy();
-
+    if (enemyCount > 0) {
+        RegenEnemy();
+    }
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
