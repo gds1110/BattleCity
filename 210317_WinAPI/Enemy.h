@@ -23,6 +23,8 @@ private:
 	Missile* missile;
 	int dir;
 
+	int idIndex;
+
 	// µîÀå ÀÌÆåÆ®
 	Image* regenEffectImg;
 	int updateCount;
@@ -47,6 +49,7 @@ public:
 	void EffectFrame();
 	void HitBox();
 	void CheckCollision();
+	void MissileDead();
 
 	// get, set
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
@@ -62,5 +65,9 @@ public:
 	inline void SetIsCol(bool isCol) { this->isCol = isCol; }
 	inline void SetTempPos(FPOINT tempPos) { this->tempPos = tempPos; }
 	inline FPOINT GetTempPos() { return this->tempPos; }
+	inline int GetIdIndex() { return this->idIndex; }
+	inline void SetIdIndex(int idIndex) { this->idIndex = idIndex; }
+
+	RECT GetEnemyMissileRc();
 };
 

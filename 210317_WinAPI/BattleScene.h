@@ -33,11 +33,18 @@ private:
 
 	float itemTimer;
 
+	//이전좌표정보
+	FPOINT prevPlPos;
+	FPOINT prevEnPos[20];
+
 	Item* item;
 	// hitBox
 	vector<RECT> vEnemyHitRc;
 	vector<Enemy*> vEnemys;
 	RECT playerHitRc;
+	vector<RECT> enemyMissileRc;
+	bool initCheck;
+	int enemyFieldcount;
 
 public:
 	virtual HRESULT Init();

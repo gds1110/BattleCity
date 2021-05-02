@@ -28,6 +28,7 @@ private:
 	TYPE missileType;
 	int fireIndex;
 	int fireStep;
+	bool isInited = false;
 
 	float imsideltaTime;
 
@@ -65,5 +66,6 @@ public:
 	void Dead(void);
 	inline RECT GetShape(void) { return this->shape; }
 	inline POINT GetSize() { return {this->sizeX,this->sizeY}; }
+	inline bool GetIsInited(void) { return this->isInited; }
 };
 

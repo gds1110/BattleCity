@@ -5,8 +5,8 @@ HRESULT EnemyManager::Init()
 {
     enemyCount = 20;
     // 적 생성 20마리
-    vEnemys.resize(enemyCount);
-    for (int i = 0; i < enemyCount; i++)
+    vEnemys.resize(4);
+    for (int i = 0; i < 4; i++)
     {
         vEnemys[i] = new Enemy();
         vEnemys[i]->Init(-100, -100);
@@ -69,21 +69,35 @@ void EnemyManager::RegenEnemy()
         regenTimer += TimerManager::GetSingleton()->GetElapsedTime();
         if (regenTimer >= 2.0f)
         {
-            vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
-            vEnemys[iIndex]->SetIsGenEffect(true);
-            vEnemys[iIndex]->SetIsAlive(true);
-            if (enemyCount > 0) {
-                enemyCount--;
+            if (vEnemys[iIndex]->GetIsAlive() == false)
+            {
+                ememyRegenCount++;
+                vEnemys[iIndex]->Init();
+                vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
+                vEnemys[iIndex]->SetIsGenEffect(true);
+                vEnemys[iIndex]->SetIsAlive(true);
+                vEnemys[iIndex]->HitBox();
+                vEnemys[iIndex]->SetIdIndex(iIndex);
+                posIndex++;
+                /*if (enemyCount > 0) {
+                    enemyCount--;
+                }*/
             }
-            // 히트박스 저장
-            //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
-            ememyRegenCount++;
-            posIndex++;
+
+            else if (vEnemys[iIndex]->GetIsAlive() == true)
+            {
+
+            }
             iIndex++;
             regenTimer = 0.0f;
             if (posIndex == 3)
             {
                 posIndex = 0;
+            }
+
+            if (iIndex > 3)
+            {
+                iIndex = 0;
             }
         }
     }
@@ -94,10 +108,55 @@ void EnemyManager::RegenEnemy()
     }
 }
 
-void EnemyManager::Dead()
+
+void EnemyManager::Dead(int index)
 {
     enemyCount -= 1;
     ememyRegenCount -= 1;
+    vEnemys[index]->SetIsAlive(false);
+}
+
+void EnemyManager::EnemyCollision()
+{
+    RECT dummyRc = { };
+    for (int i = 0; i < 4 /*enemyCount*/; i++)
+    {
+        for (int j = 0; j < 4 /*enemyCount*/; j++)
+        {
+            if (i == j) continue;
+            else
+            {
+                if (vEnemys[i]->GetIsAlive())
+                {
+                    if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &vEnemys[j]->hitRc))
+                    {
+                        switch (vEnemys[i]->GetState())
+                        {
+                        case 0:
+                            vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x,float(vEnemys[j]->hitRc.bottom + vEnemys[i]->GetSizeH() / 2) });
+                            vEnemys[i]->SetState(1);
+                            break;
+                        case 1:
+                            vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x ,float(vEnemys[j]->hitRc.top - vEnemys[i]->GetSizeH() / 2) });
+                            vEnemys[i]->SetState(0);
+                            break;
+                        case 2:
+                            vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.right + vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            vEnemys[i]->SetState(3);
+                            break;
+                        case 3:
+                            vEnemys[i]->SetPos({ float(vEnemys[j]->hitRc.left - vEnemys[i]->GetSizeW() / 2),vEnemys[i]->GetPos().y });
+                            vEnemys[i]->SetState(2);
+                            break;
+                        default:
+                            break;
+                        }
+                        //vEnemys[i]->SetIsCol(true);
+                    }
+                }
+            }
+        }
+    }
 }
 
 //RECT EnemyManager::GetHitRc(int count)

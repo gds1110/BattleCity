@@ -21,7 +21,7 @@ HRESULT Missile::Init()
 		"Image/Effect/Boom_Effect.bmp", 64 * EXPLOSION_MAX_FRAME, 64, EXPLOSION_MAX_FRAME, 1, true, RGB(255, 0, 255));
 
 	pos = {-100, -100};
-	moveSpeed = 3000.0f;
+	moveSpeed = 400.0f;
 	moveTime = 10.0f;
 	sizeX = 9;
 	sizeY = 12;
@@ -49,13 +49,13 @@ HRESULT Missile::Init()
 			"EnemyMissile에 해당하는 이미지가 추가되지 않았음!", "경고", MB_OK);
 		return E_FAIL;
 	}
-
+	isInited = true;
     return S_OK;
 }
 
 void Missile::Release()
 {
-
+	isInited = false;
 }
 
 void Missile::Update()
