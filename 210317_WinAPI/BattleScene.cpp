@@ -193,10 +193,11 @@ void BattleScene::StageLoad(int stageNum)
 
 void BattleScene::CheckCollision()
 {
-	// 더미 Rc
+	// Rc
 	RECT dummyRc = { };
 	initCheck = true;
 	HitBox();
+
 	// 적 <-> 적
 	enemyMgr->EnemyCollision();
 
@@ -208,7 +209,7 @@ void BattleScene::CheckCollision()
 
 	// 적 미사일 <-> 플레이어
 
-	//적<->타일
+	// 적 <-> 타일
 	for (int j = 0; j < TILE_X * TILE_Y; j++)
 	{
 		//HitBox();
