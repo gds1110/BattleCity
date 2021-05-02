@@ -36,7 +36,8 @@ private:
 
 	Item* item;
 	// hitBox
-	vector<RECT> vEnemyHitRc;
+	//vector<RECT> vEnemyHitRc;
+	map<int, RECT> mEnemyHitRc;
 	vector<Enemy*> vEnemys;
 	RECT playerHitRc;
 	vector<RECT> enemyMissileRc;

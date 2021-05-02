@@ -14,6 +14,7 @@ private:
 	float regenTimer;
 	int iIndex;
 	bool regenEnemy;
+	int maxFieldCount;
 	//vector<RECT> vHitRc;
 
 public:
