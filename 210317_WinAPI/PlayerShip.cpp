@@ -257,7 +257,7 @@ void PlayerShip::Render(HDC hdc)
 		
 		for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
 		{
-			if(SUCCEEDED(missile[i].Init()))
+			if(missile[i].GetIsInited())
 			missile[i].Render(hdc);
 		}
 	}

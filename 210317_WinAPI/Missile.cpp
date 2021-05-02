@@ -49,13 +49,13 @@ HRESULT Missile::Init()
 			"EnemyMissile에 해당하는 이미지가 추가되지 않았음!", "경고", MB_OK);
 		return E_FAIL;
 	}
-
+	isInited = true;
     return S_OK;
 }
 
 void Missile::Release()
 {
-
+	isInited = false;
 }
 
 void Missile::Update()
