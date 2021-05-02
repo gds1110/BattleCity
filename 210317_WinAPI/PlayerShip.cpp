@@ -67,6 +67,7 @@ void PlayerShip::Release()
 		missile[i].Release();
 	}
 	delete[] missile;
+	missile = nullptr;
 }
 
 void PlayerShip::Update()

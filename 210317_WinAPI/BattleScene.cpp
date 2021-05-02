@@ -25,7 +25,7 @@ HRESULT BattleScene::Init()
 	else
 	{
 		playerShip->Init();
-		//Load();
+		Load();
 	}
 
 	bin = new Image();
@@ -81,15 +81,16 @@ void BattleScene::Update()
 			itemTimer = 0;
 		}
 	}
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+	for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
 	{
-		if (SceneManager::currStage < 3)
+		if (vEnemys[i]->GetIsAlive())
 		{
-			playerShip->SetPos({ 100,100 });
-			Save();
-			SceneManager::GetSingleton()->currStage += 1;
-			SceneManager::GetSingleton()->ChangeScene("로딩씬");
+			prevEnPos[i] = vEnemys[i]->GetPos();
 		}
+	}
+	if (playerShip)
+	{
+		prevPlPos = playerShip->GetPos();
 	}
 
 	if (enemyMgr)
@@ -113,6 +114,16 @@ void BattleScene::Update()
 	}
 	
 	CheckCollision();
+	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
+	{
+		if (SceneManager::currStage < 3)
+		{
+			playerShip->SetPos({ 100,100 });
+			Save();
+			SceneManager::GetSingleton()->currStage += 1;
+			SceneManager::GetSingleton()->ChangeScene("로딩씬");
+		}
+	}
 }
 
 void BattleScene::Render(HDC hdc)
@@ -217,10 +228,38 @@ void BattleScene::CheckCollision()
 	// 적 <-> 적
 
 	// 적 <-> 플레이어
-	if (IntersectRect(&dummyRc, &vEnemyHitRc[0], &playerHitRc))
+	if (playerShip)
 	{
-		
+		if (playerShip->GetIsAlive())
+		{
+			for (int i = 0; i < enemyMgr->GetIsEnemyCount(); i++)
+			{
+				if (vEnemys[i]->GetIsAlive()) 
+				{
+					if (IntersectRect(&dummyRc, &vEnemys[i]->hitRc, &playerHitRc))
+					{
+						//플레이어가 왼쪽
+						if ((dummyRc.left > playerShip->GetPos().x)||(dummyRc.right < playerShip->GetPos().x))
+						{
+							playerShip->SetPos({ prevPlPos.x,playerShip->GetPos().y });
+							vEnemys[i]->SetPos({ prevEnPos[i].x,vEnemys[i]->GetPos().y });
+						}
+						
+						//플레이어가 위
+						if ((dummyRc.top > playerShip->GetPos().y)|| (dummyRc.bottom < playerShip->GetPos().y))
+						{
+							playerShip->SetPos({ playerShip->GetPos().x, prevPlPos.y });
+							vEnemys[i]->SetPos({ vEnemys[i]->GetPos().x, prevEnPos[i].y });
+						}
+						
+
+					}
+				}
+				
+			}
+		}
 	}
+	
 
 
 	// 적 미사일 <-> 플레이어
