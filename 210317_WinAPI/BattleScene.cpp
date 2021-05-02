@@ -412,9 +412,10 @@ void BattleScene::CheckCollision()
 		}
 	}
 
-	// 적 미사일 <-> 플레이어 미사일 
+	
 	for (int i = 0; i < enemyMgr->GetRegenEnemyCount(); i++)
 	{
+		// 적 미사일 <-> 플레이어 미사일 
 		if (vEnemys[i]->GetIsAlive())
 		{
 			if (IntersectRect(&dummyRc, &enemyMissileRc[i], &MissileRC))
@@ -424,6 +425,18 @@ void BattleScene::CheckCollision()
 				break;
 			}
 		}
+		// 적 미사일 <-> 플레이어
+		if(playerShip)
+			if (playerShip->GetIsAlive())
+			{
+				if (IntersectRect(&dummyRc, &enemyMissileRc[i], &playerHitRc))
+				{
+					playerShip->OnDead();
+					vEnemys[i]->MissileDead();
+					break;
+				}
+			}
+		
 	}
 
 	// 적 미사일 <-> 타일
