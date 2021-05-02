@@ -24,6 +24,7 @@ private:
 
 	//스탯
 	int HP = 1;
+	int life =3;
 	int size = 48;
 	int missileCount;
 	float moveSpeed;	// 초당 이동거리
@@ -34,6 +35,8 @@ private:
 	float	barrelAngle;
 	RECT shape;
 	int outputMove=10;
+	FPOINT deadPos;
+	FPOINT summonPos;
 
 	//프레임+시간
 	int stateFrameX = 0;
@@ -43,6 +46,9 @@ private:
 	float	summonTimer;
 	float	totalSummonTimer;
 	int		summonFrame;
+	float	deadTimer;
+	float	totalDeadTimer;
+	int		deadFrame;
 	POINT maxFrame = { 8,4 };
 	
 	//선언
@@ -53,6 +59,8 @@ private:
 	//이미지
 	Image* image;
 	Image* summonImg;
+	Image* deadImg1;
+	Image* deadImg2;
 
 public:
 	HRESULT Init();
@@ -72,6 +80,8 @@ public:
 	inline bool GetIsAlive(void) { return this->isAlive; }
 	inline int GetMoveStat(void) { return this->outputMove; }
 	inline int GetSize(void) { return this->size; }
+	inline int GetLife(void) { return this->life; }
+	inline void SetLife(int life) { this->life = life; }
 	void MissileDead(int index);
 	RECT GetMissileShape(int index);
 

@@ -5,6 +5,9 @@
 #define SUMMON_MAX_FRAME 4
 #define SUMMON_MAX_TIME 1.5
 #define SUMMON_FRAME_TIME 0.1
+#define DEAD_MAX_FRAME 5
+#define DEAD_MAX_TIME 0.6
+#define DEAD_FRAME_TIME 0.1
 HRESULT PlayerShip::Init()
 {
 	if (image == nullptr)
@@ -27,17 +30,39 @@ HRESULT PlayerShip::Init()
 			return E_FAIL;
 		}
 	}
+	if (deadImg1 == nullptr)
+	{
+		deadImg1 = ImageManager::GetSingleton()->AddImage("PlayerDead1",
+			"Image/Effect/Boom_Effect.bmp", 3 * TILESIZE * 2, TILESIZE * 2, 3, 1, true, RGB(255, 0, 255));
+		if (deadImg1 == nullptr)
+		{
+			MessageBox(g_hWnd, "플레이어1 탱크 죽음1 이미지 로드 실패", "초기화 실패", MB_OK);
+			return E_FAIL;
+		}
+	}
+	if (deadImg2 == nullptr)
+	{
+		deadImg2 = ImageManager::GetSingleton()->AddImage("PlayerDead2",
+			"Image/Effect/Big_Boom_Effect.bmp",2 * TILESIZE * 2, TILESIZE * 2, 2, 1, true, RGB(255, 0, 255));
+		if (deadImg2 == nullptr)
+		{
+			MessageBox(g_hWnd, "플레이어1 탱크 죽음2 이미지 로드 실패", "초기화 실패", MB_OK);
+			return E_FAIL;
+		}
+	}
 	summonTimer = 0;
 	summonFrame = 0;
 	totalSummonTimer = 0;
+	deadTimer = 0;
+	deadFrame = 0;
+	totalDeadTimer = 0;
 	movestat = MoveInfo::STOP;
 	renderStat = RenderInfo::TOP;
 	isSummon = false;
 	shape={};
 
 
-	pos.x = WINSIZE_X / 2;
-	pos.y = WINSIZE_Y / 2;
+	
 
 	barrelEnd = { pos.x,pos.y - TILESIZE*2 / 2 };
 	barrelAngle = PI / 2;
@@ -56,6 +81,21 @@ HRESULT PlayerShip::Init()
 
 	isAlive = true;
 	isDying = false;
+	
+	switch (SceneManager::GetSingleton()->currStage)
+	{
+	case 1:
+		summonPos = { TILESIZE * 8,TILESIZE * 24 };
+		this->life = 3;
+		break;
+	case 2:
+		summonPos = { TILESIZE * 16,TILESIZE * 10 };
+		break;
+	case 3:
+		summonPos = { TILESIZE * 20,TILESIZE * 24};
+		break;
+	}
+	SetPos(summonPos);
 	Appear();
 	return S_OK;
 }
@@ -82,11 +122,7 @@ void PlayerShip::Update()
 		}
 		
 	}
-	if (isDying)
-	{
-		OnDead();
-	}
-	else if(isAlive)//실제 작동부
+	if(isAlive)//실제 작동부
 	{
 		if (!isSummon)
 		{
@@ -198,7 +234,25 @@ void PlayerShip::Update()
 		}
 		shape = { (long)pos.x - size / 2,(long)pos.y - size / 2 ,(long)pos.x + size / 2 ,(long)pos.y + size / 2 };
 	}
-	
+	if (isDying)
+	{
+		deadTimer += TimerManager::GetSingleton()->GetElapsedTime();
+		totalDeadTimer += TimerManager::GetSingleton()->GetElapsedTime();
+		if (deadTimer >= DEAD_FRAME_TIME)
+		{
+			deadTimer -= DEAD_FRAME_TIME;
+			++deadFrame;
+		}
+		if (deadFrame >= DEAD_MAX_FRAME)
+		{
+			deadFrame = 0;
+		}
+		if (totalDeadTimer >= DEAD_MAX_TIME)
+		{
+			isDying = false;
+		}
+
+	}
 	for (int i = 0; i < sizeof(*missile) / sizeof(Missile); i++)
 	{
 		missile[i].Update();
@@ -208,7 +262,7 @@ void PlayerShip::Update()
 void PlayerShip::Render(HDC hdc)
 {
 	Rectangle(hdc, shape.left, shape.top, shape.right, shape.bottom);
-	if (!isSummon)
+	if (!isSummon&&isAlive)
 	{
 		if (image)
 		{
@@ -247,11 +301,21 @@ void PlayerShip::Render(HDC hdc)
 			//image->Render(hdc, pos.x, pos.y);
 		}
 	}
-	else
+	else if(isSummon)
 	{
 		summonImg->FrameRender(hdc, pos.x, pos.y, summonFrame, 0, true);
 	}
-	
+	if (isDying)
+	{
+		if (deadFrame < 3) 
+		{
+			deadImg1->FrameRender(hdc, deadPos.x, deadPos.y, deadFrame, 0, true);
+		}
+		else
+		{
+			deadImg2->FrameRender(hdc, deadPos.x, deadPos.y, deadFrame-3, 0, true);
+		}
+	}
 	if (missile) 
 	{
 		
@@ -266,20 +330,17 @@ void PlayerShip::Render(HDC hdc)
 
 void PlayerShip::OnDead()
 {
-	if (image)
+	isDying = true;
+	isAlive = false;
+	deadFrame = 0;
+	deadTimer = 0;
+	totalDeadTimer = 0;
+	deadPos = pos;
+	--life;
+	if (life >= 0)
 	{
-		BLENDFUNCTION* blendFunc = image->GetBlendFunc();
-
-		if (blendFunc->SourceConstantAlpha > 120)
-		//if (blendFunc->SourceConstantAlpha < 255)
-		{
-			blendFunc->SourceConstantAlpha--;
-		}
-		else
-		{
-			isDying = false;
-			isAlive = false;
-		}
+		SetPos(summonPos);
+		Appear();
 	}
 }
 void PlayerShip::MissileDead(int index)
@@ -306,7 +367,7 @@ void PlayerShip::PlayerSave()
 	fileName += ".Player";
 	DWORD writtenBytes;
 	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	WriteFile(hFile, &pos, sizeof(FPOINT), &writtenBytes, NULL);
+	WriteFile(hFile, &life, sizeof(int), &writtenBytes, NULL);
 	CloseHandle(hFile);
 }
 void PlayerShip::PlayerLoad()
@@ -315,9 +376,9 @@ void PlayerShip::PlayerLoad()
 	fileName += ".Player";
 	DWORD readBytes;
 	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (ReadFile(hFile, &pos, sizeof(FPOINT), &readBytes, NULL))
+	if (ReadFile(hFile, &life, sizeof(int), &readBytes, NULL))
 	{
-		SetPos(pos);
+		SetLife(life);
 	}
 	else
 	{
