@@ -72,7 +72,9 @@ void EnemyManager::RegenEnemy()
             vEnemys[iIndex]->SetPos(vEnemyGenPos[posIndex]);
             vEnemys[iIndex]->SetIsGenEffect(true);
             vEnemys[iIndex]->SetIsAlive(true);
-
+            if (enemyCount > 0) {
+                enemyCount--;
+            }
             // 히트박스 저장
             //vHitRc[ememyRegenCount] = vEnemys[iIndex]->GetHitRc();
             ememyRegenCount++;

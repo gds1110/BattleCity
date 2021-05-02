@@ -16,18 +16,13 @@ HRESULT BattleScene::Init()
 
 	SetClientRect(g_hWnd, TILE_X * TILESIZE+ UISPACE_X, TILESIZE * TILE_Y);
 
-	StageLoad(SceneManager::currStage);
 
-		playerShip = new PlayerShip();
-	if (SceneManager::GetSingleton()->currStage == 1) {
-		playerShip->Init();
+	playerShip = new PlayerShip();
+	playerShip->Init();
+	if (SceneManager::GetSingleton()->currStage != 1) {
+		playerShip->PlayerLoad();
 	}
-	else
-	{
-		playerShip->Init();
-		Load();
-	}
-
+	
 	bin = new Image();
 	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);
 
@@ -35,6 +30,7 @@ HRESULT BattleScene::Init()
 	enemyMgr = new EnemyManager();
 	enemyMgr->Init();
 
+	gameOn = true;
 
 	itemMgr = new ItemManager();
 	itemMgr->Init();
@@ -54,6 +50,7 @@ HRESULT BattleScene::Init()
 	//playerHitRc = {};
 	
 	HitBox();
+	StageLoad(SceneManager::currStage);
 
 	return S_OK;
 }
@@ -71,6 +68,7 @@ void BattleScene::Update()
 	itemTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	int random;
 	int typeRandom;
+
 	if (itemTimer > 3.0f)
 	{
 		random = rand()% (TILE_X * TILE_Y);
@@ -85,17 +83,38 @@ void BattleScene::Update()
 	{
 		if (vEnemys[i]->GetIsAlive())
 		{
-			prevEnPos[i] = vEnemys[i]->GetPos();
+			//playerShip->SetPos({ 100,100 });
+			playerShip->PlayerSave();
+			SceneManager::GetSingleton()->currStage += 1;
+
 		}
-	}
-	if (playerShip)
-	{
-		prevPlPos = playerShip->GetPos();
+			SceneManager::GetSingleton()->ChangeScene("로딩씬");
+			//Release();
+			Init();
 	}
 
 	if (enemyMgr)
 	{
 		enemyMgr->Update();
+		//if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN)) {
+		//	/*enemyMgr->miE1();
+		//	enemyMgr->miE2();*/
+
+		//	if (SceneManager::currStage < 3)
+		//	{
+		//		SceneManager::GetSingleton()->currStage += 1;
+		//	}
+		//	SceneManager::GetSingleton()->ChangeScene("로딩씬");
+		//}
+
+		//if (enemyMgr->GetIsEnemyCount() <= 0 && enemyMgr->GetRegenEnemyCount() <= 0)
+		//{
+		//	if (SceneManager::currStage < 3)
+		//	{
+		//		SceneManager::GetSingleton()->currStage += 1;
+		//	}
+		//	SceneManager::GetSingleton()->ChangeScene("로딩씬");
+		//}
 	}
 	
 
@@ -119,7 +138,6 @@ void BattleScene::Update()
 		if (SceneManager::currStage < 3)
 		{
 			playerShip->SetPos({ 100,100 });
-			Save();
 			SceneManager::GetSingleton()->currStage += 1;
 			SceneManager::GetSingleton()->ChangeScene("로딩씬");
 		}
@@ -181,7 +199,7 @@ void BattleScene::Render(HDC hdc)
 	}
 	if (battleUi)
 	{
-		battleUi->Render(hdc);
+		battleUi->Render2(hdc,playerShip->GetHp(),enemyMgr->GetIsEnemyCount());
 	}
 }
 
@@ -417,7 +435,25 @@ void BattleScene::CheckCollision()
 	// 적, 플레이어 미사일 <-> 얼음
 
 	// 적, 플레이어, 미사일 <-> 수리
-	
+	RECT itemdummy = {};
+	RECT itemRC = {};
+	// 플레이어 <-> 아이템
+	if (itemMgr)
+	{
+		for (int i = 0; i < itemMgr->GetItem().size(); i++)
+		{
+			if (itemMgr->GetItem()[i]->GetDrop() == true)
+			{
+				itemRC = itemMgr->GetItem()[i]->GetRc();
+				if (IntersectRect(&itemdummy,&playerHitRc, &itemRC))
+				{
+					itemMgr->GetItem()[i]->SetPos({ -200,-200 });
+					itemMgr->GetItem()[i]->SetDrop(false);
+				}
+			}
+		}
+	}
+
 }
 
 void BattleScene::HitBox()
@@ -441,29 +477,4 @@ void BattleScene::ItemSkill(int a)
 
 }
 
-void BattleScene::Save(void)
-{
-	string fileName = "Player/playerData";
-	fileName += ".Player";
-	DWORD writtenBytes;
-	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	WriteFile(hFile, playerShip, sizeof(PlayerShip), &writtenBytes, NULL);
-	CloseHandle(hFile);
-}
 
-void BattleScene::Load(void)
-{
-	string fileName = "Player/playerData";
-	fileName += ".Player";
-	DWORD readBytes;
-	HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (ReadFile(hFile, playerShip, sizeof(PlayerShip), &readBytes, NULL))
-	{
-
-	}
-	else
-	{
-		MessageBox(g_hWnd, "세이브로드실패", "error", MB_OK);
-	}
-	CloseHandle(hFile);
-}

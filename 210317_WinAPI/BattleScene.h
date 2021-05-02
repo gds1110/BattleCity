@@ -26,6 +26,8 @@ private:
 	PlayerShip* playerShip;
 	BattleUi* battleUi;
 
+	bool gameOn;
+
 	float itemTimer;
 
 	//이전좌표정보
@@ -53,7 +55,6 @@ public:
 
 	void ItemSkill(int a);
 
-	void Save(void);
-	void Load(void);
+
 };
 

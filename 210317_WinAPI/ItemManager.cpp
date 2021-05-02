@@ -56,6 +56,7 @@ void ItemManager::DropItem(POINT pos,int type)
         {
             vItems[i]->SetDrop(true);
             vItems[i]->SetPos(pos);
+           // vItems[i]->SetRC(pos);
             vItems[i]->SetType(type);
 
             break;
