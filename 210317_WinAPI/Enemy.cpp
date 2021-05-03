@@ -141,7 +141,7 @@ void Enemy::Move()
 void Enemy::Direction()
 {
     float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
-    srand(time(NULL));
+   // srand(time(NULL));
     switch (state)
     {
     case UP:
@@ -228,7 +228,7 @@ void Enemy::CheckCollision()
     if (isCol)
     {
         //float elapsedTime = TimerManager::GetSingleton()->GetElapsedTime();
-        srand(time(NULL));
+       // srand(time(NULL));
         switch (state)
         {
         case UP:

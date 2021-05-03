@@ -22,9 +22,9 @@ HRESULT BattleScene::Init()
 	playerShip = new PlayerShip();
 	playerShip->Init();
 	playerShip->SetHp(3);
-	//if (SceneManager::GetSingleton()->currStage != 1) {
-	//	playerShip->PlayerLoad();
-	//}
+	if (SceneManager::GetSingleton()->currStage != 1) {
+		playerShip->PlayerLoad();
+	}
 	
 	bin = new Image();
 	bin->Init("Image/mapImage2.bmp", TILE_X * TILESIZE + UISPACE_X, TILESIZE * TILE_Y);
@@ -106,7 +106,9 @@ void BattleScene::Update()
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyDown('W'))
 	{
-		playerShip->SetHp(playerShip->GetHp() - 1);
+		//playerShip->SetHp(playerShip->GetHp() - 1);
+		//enemyMgr->miE1();
+		//enemyMgr->miE2();
 	}
 	if (enemyMgr)
 	{
@@ -116,6 +118,18 @@ void BattleScene::Update()
 		}
 		enemyMgr->Update();
 
+		if (enemyMgr->GetRegenEnemyCount() == 0 && enemyMgr->GetIsEnemyCount() == 0) {
+			if (SceneManager::currStage < 3)
+			{
+				//playerShip->SetPos({ 100,100 });
+				playerShip->PlayerSave();
+				SceneManager::GetSingleton()->currStage += 1;
+
+			}
+			SceneManager::GetSingleton()->ChangeScene("·Îµù¾À");
+			//Release();
+			Init();
+		}
 	}
 	
 
